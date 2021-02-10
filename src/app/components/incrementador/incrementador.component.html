@@ -1,0 +1,14 @@
+<div class="input-group">
+    <span class="input-group-btn">
+        <button class="btn btn-danger" type="button" (click)="cambiarValor(-5)"> <i class="fa fa-minus"></i></button>
+    </span>
+    <input 
+        type="text"
+        class="form-control" 
+        placeholder="Progreso" 
+        [(ngModel)]="porcentaje">
+
+    <span class="input-group-btn">
+        <button class="btn btn-success" type="button" (click)="cambiarValor(5)"> <i class="fa fa-plus"></i></button>
+    </span>
+</div>
