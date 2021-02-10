@@ -22,8 +22,8 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 
   ],
   exports: [
-    DashboardComponent,
     PagesComponent,
+    DashboardComponent,
     ProgressComponent,
     AccountSettingsComponent
   ],
