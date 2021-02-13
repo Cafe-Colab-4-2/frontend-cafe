@@ -29,7 +29,31 @@ export class PromisesComponent implements OnInit {
     });
 
     console.log('FIN DEL INIT');
+
+    // PRÁCTICA 
+    this.getUsuarios().then( usuarios => {
+      console.log(usuarios);
+    }) 
     
+  }
+
+  // getUsuarios() {
+  //   fetch('https://reqres.in/api/user')
+  //     .then( resp => {
+  //       console.log('Tengo Data', resp.json().then( (body) => {
+  //           console.log(body);
+  //       }));
+  //     })
+  // }
+
+
+  getUsuarios() {
+
+    return new Promise(resolve => { 
+      fetch('https://reqres.in/api/user')
+      .then( resp => resp.json() )
+      .then( body => resolve(body.data))
+    });
   }
 
 
