@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-promises',
-  templateUrl: './promises.component.html',
-  styleUrls: ['./promises.component.css']
+  templateUrl: './promises.component.html'
 })
 export class PromisesComponent implements OnInit {
 
