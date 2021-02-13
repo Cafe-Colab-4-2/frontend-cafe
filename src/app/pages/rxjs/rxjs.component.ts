@@ -9,17 +9,17 @@ import { retry } from 'rxjs/operators';
 export class RxjsComponent {
 
   constructor() { 
-    this.observable();
+    this.suscripcionObservable();
   }
 
-  observable() {
+  retornaObservable(): Observable<number> {
     
     let i = -1;
 
     /**
      * Envía un parámetro observer, el cual devolverá información según lo que pase en la función
      */
-    const obs = new Observable( observer => {
+    return new Observable<number>( observer => {
   
           // Se creo un intervalo que repetirá cada segundo
       const intervalo = setInterval( () => {
@@ -38,18 +38,22 @@ export class RxjsComponent {
       }, 1000);
 
     });
-  
+  }
+
+  suscripcionObservable() {
+     
     /**
      * Ejecución del Observable, para ello se debe suscribir
      * Por defecto son tres funciones: CORRECTO, ERROR y FIN
      * los cuales se ejcutan en funciones de flecha 
      */
-      obs.pipe(
-        retry()
-      ).subscribe(
-      valor => console.log('Subs: ', valor),
-      error => console.log('Error, ', error),
-      () => console.log('OBS TERMINADO')
-    );
+    this.retornaObservable().pipe(
+      retry()   // Se puede enviar un parámetro donde indique las veces que se quiere que reintente ej: retry(3) 
+    ).subscribe(
+    valor => console.log('Subs: ', valor),
+    error => console.log('Error, ', error),
+    () => console.log('OBS TERMINADO')
+  );
   }
+  
 }
