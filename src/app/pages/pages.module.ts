@@ -10,6 +10,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProgressComponent } from './progress/progress.component';
 import { ComponentsModule } from '../components/components.module';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { PromisesComponent } from './promises/promises.component';
 
 
 
@@ -18,14 +19,16 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
     PagesComponent,
     DashboardComponent,
     ProgressComponent,
-    AccountSettingsComponent
+    AccountSettingsComponent,
+    PromisesComponent
 
   ],
   exports: [
     PagesComponent,
     DashboardComponent,
     ProgressComponent,
-    AccountSettingsComponent
+    AccountSettingsComponent,
+    PromisesComponent
   ],
   imports: [
     CommonModule,
