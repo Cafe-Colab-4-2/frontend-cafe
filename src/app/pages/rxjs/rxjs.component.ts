@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, interval } from 'rxjs';
-import { retry, take, map } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, interval, Subscription } from 'rxjs';
+import { retry, take, map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-rxjs',
   templateUrl: './rxjs.component.html'
 })
-export class RxjsComponent {
+export class RxjsComponent implements OnDestroy{
+
+
+  intervaloSuscription: Subscription;
 
   constructor() { 
     // this.suscripcionObservable();
@@ -24,17 +27,27 @@ export class RxjsComponent {
        
     */
       
-   this.retornaIntervalo()
+   this.intervaloSuscription = this.retornaIntervalo()
      .subscribe(console.log);
      
+  }
+
+  ngOnDestroy() {
+    this.intervaloSuscription.unsubscribe();
+  }
+
+  iniciaIntervalo() {
+    this.intervaloSuscription = this.retornaIntervalo()
+    .subscribe(console.log);  
   }
 
 
   retornaIntervalo(): Observable<number> {
     return interval(1000)
     .pipe(                     
-      take(4),           // Limita las veces que se ejecuta el intervalo en este caso sería de 0 a 3
-      map( valor => valor + 1) // Sustituye el valor por defecto por el que se le indique, puede ser un valor o lo que sea
+      take(10),           // Limita las veces que se ejecuta el intervalo en este caso sería de 0 a 3, el orden es importante
+      map( valor => valor ), // Sustituye el valor por defecto por el que se le indique, puede ser un valor o lo que sea
+      filter( valor => (valor % 2 === 0)? true : false) // deja pasar únicamente los valores que cumplen 
      );
   }
 
