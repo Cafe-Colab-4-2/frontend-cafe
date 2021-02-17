@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UsersService } from '../../services/users.service';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
     password: ['0000', [ Validators.required ]]
   });
 
-  constructor( private router: Router, private fb: FormBuilder ) { }
+  constructor( private router: Router, private fb: FormBuilder, private usuariosService: UsersService ) { }
 
   ngOnInit(): void {
   }
@@ -28,13 +29,11 @@ export class LoginComponent implements OnInit {
     this.formSubmitted = true;
     console.log( this.loginForm.value ); 
 
-    if ( this.loginForm.valid ) {
-      console.log('Formulario posteado');
+    if ( this.loginForm.invalid ) {
+      return;
     }
-    else {
-      console.log('Formulario Inválido');
-      
-    }
+
+    // this.usuariosService.postUser( this.loginForm.value )   
   }
 
   campoNoValido( campo: string): boolean {

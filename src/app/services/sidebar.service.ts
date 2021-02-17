@@ -15,6 +15,13 @@ export class SidebarService {
         { titulo: 'Promises', url: 'promises' },
         { titulo: 'Rxjs', url: 'rxjs'}
       ]
+    },
+    {
+      titulo: 'Mantenimientos',
+      icon: 'mdi mdi-gauge',
+      submenu: [
+        { titulo: 'Users', url: 'users' }
+      ]
     }
   ]
 
