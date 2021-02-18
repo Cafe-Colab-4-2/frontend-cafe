@@ -9,10 +9,11 @@ import { environment } from '../../environments/environment';
 
 import { Usuario } from '../models/usuario.model';
 import { LoginForm } from '../interfaces/login-form';
+import { RegisterForm } from '../interfaces/register-form';
 
 const base_url = environment.base_url;
 
-declare const gapi: any;
+// declare const gapi: any;
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class UsersService {
                 private router: Router,
                 private ngZone: NgZone ) {
 
-    this.googleInit();
+    // this.googleInit();
     
   }
 
@@ -47,6 +48,7 @@ export class UsersService {
     }
   }
 
+  /*
   googleInit() {
 
     return new Promise( resolve => {
@@ -61,6 +63,7 @@ export class UsersService {
     })
 
   }
+  */
 
   logout() {
     localStorage.removeItem('token');
@@ -75,16 +78,19 @@ export class UsersService {
   }
 
   validarToken(): Observable<boolean> {
-    
+
     return this.http.get(`${ base_url }/login/renew`, {
       headers: {
         'x-token': this.token
       }
     }).pipe(
-      map( (resp: any) => {
-        const { email, google, nombre, role, img = '', uid } = resp.usuario;
-        this.usuario = new Usuario( nombre, email, '', img, google, role, uid );
+      tap( (resp: any) => {
         localStorage.setItem('token', resp.token );
+      }),
+      map( (resp: any) => {
+        // nombre email role google activo img
+        // const { email, google, nombre, role, activo, img = '', uid } = resp.usuario;
+        // this.usuario = new Usuario( nombre, email, '', img, google, role, activo, uid );
         return true;
       }),
       catchError( error => of(false) )
@@ -93,18 +99,20 @@ export class UsersService {
   }
 
   // Crear Usuarios
-/*
   crearUsuario( formData: RegisterForm ) {
     
-    return this.http.post(`${ base_url }/usuarios`, formData )
-              .pipe(
-                tap( (resp: any) => {
-                  localStorage.setItem('token', resp.token )
-                })
-              )
+    // console.log('Creando Usuario');
+    
+
+    return this.http.post(`${ base_url }/usuarios`, formData );
+              // .pipe(
+              //   tap( (resp: any) => {
+              //     localStorage.setItem('token', resp.token )
+              //   })
+              // )
 
   }
-  */
+  
 
   // Actualizar Perfil
   /*
@@ -121,8 +129,8 @@ export class UsersService {
   */
 
   // Login
-  /*
-  login( formData: LoginForm ) {
+  
+  logIn( formData: LoginForm ) {
     
     return this.http.post(`${ base_url }/login`, formData )
                 .pipe(
@@ -133,6 +141,7 @@ export class UsersService {
 
   }
 
+  /*
   loginGoogle( token ) {
     
     return this.http.post(`${ base_url }/login/google`, { token } )
