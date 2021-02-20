@@ -18,10 +18,12 @@ export class LoginComponent implements OnInit {
   public loginForm = this.fb.group({
     email: [ localStorage.getItem('email') || '', [ Validators.required, Validators.email ]],
     password: ['', [ Validators.required ]],
-    remember: [false]
+    remember: [true]
   });
 
-  constructor( private router: Router, private fb: FormBuilder, private usersService: UsersService ) { }
+  constructor( private router: Router, private fb: FormBuilder, private usersService: UsersService ) { 
+
+  }
 
   ngOnInit(): void {}
 
@@ -29,7 +31,9 @@ export class LoginComponent implements OnInit {
 
 
   loginUsuario() {
-
+    
+    
+    this.formSubmitted = true;
     // Realizar Posteo USERS.SERVICE
     this.usersService.logIn( this.loginForm.value )
     .subscribe( (resp) => {
@@ -39,11 +43,12 @@ export class LoginComponent implements OnInit {
       } else {
         localStorage.removeItem('email');
       }
+
         console.log('Login correcto');
         console.log(resp);
-        Swal.fire('Bienvenido', '', 'success');
-
+        Swal.fire('Bienvenido/a', this.loginForm.get('email').value, 'success');
         this.router.navigateByUrl('/dashboard');
+
       
     }, (err) => {
         Swal.fire('Error', err.error.msg, 'error')
