@@ -65,17 +65,21 @@ export class UsersService {
   }
   */
 
-  logout() {
+  logOut() {
     localStorage.removeItem('token');
 
-    this.auth2.signOut().then(() => {
+    // this.auth2.signOut().then(() => {
+
+    //   this.ngZone.run(() => {
+    //     this.router.navigateByUrl('/login');
+    //   })
+    // });
 
       this.ngZone.run(() => {
         this.router.navigateByUrl('/login');
       })
-    });
-
   }
+
 
   validarToken(): Observable<boolean> {
 
@@ -89,8 +93,9 @@ export class UsersService {
       }),
       map( (resp: any) => {
         // nombre email role google activo img
-        // const { email, google, nombre, role, activo, img = '', uid } = resp.usuario;
-        // this.usuario = new Usuario( nombre, email, '', img, google, role, activo, uid );
+        const { email, google, nombre, role, activo, img, uid } = resp.usuario;
+        this.usuario = new Usuario( nombre, email, '',  activo, img, google, role, uid );
+
         return true;
       }),
       catchError( error => of(false) )
@@ -101,17 +106,18 @@ export class UsersService {
   // Crear Usuarios
   crearUsuario( formData: RegisterForm ) {
     
-    // console.log('Creando Usuario');
+    console.log('Creando Usuario');
     
 
-    return this.http.post(`${ base_url }/usuarios`, formData );
-              // .pipe(
-              //   tap( (resp: any) => {
-              //     localStorage.setItem('token', resp.token )
-              //   })
-              // )
+    return this.http.post(`${ base_url }/usuarios`, formData, this.headers  )
+              .pipe(
+                tap( (resp: any) => {
+                  localStorage.setItem('token', resp.token )
+                })
+              )
 
   }
+  // Fin Crear Usuarios
   
 
   // Actualizar Perfil
@@ -128,8 +134,7 @@ export class UsersService {
   }
   */
 
-  // Login
-  
+  // LogIn
   logIn( formData: LoginForm ) {
     
     return this.http.post(`${ base_url }/login`, formData )
@@ -140,6 +145,7 @@ export class UsersService {
                 );
 
   }
+  // Fin LogIn
 
   /*
   loginGoogle( token ) {
@@ -155,9 +161,29 @@ export class UsersService {
   */
 
   // CARGAR USUARIOS CON PAGINACIÓN
-//   cargarUsuarios( desde: number = 0 ) {
+  // cargarUsuarios( desde: number = 0 ) {
 
-//     const url = `${ base_url }/usuarios?desde=${ desde }`;
+  //   const url = `${ base_url }/usuarios?desde=${ desde }`;
+  //   return this.http.get( url, this.headers )
+  //           .pipe(
+  //             map( resp => {
+  //               const usuarios = resp.usuarios.map( 
+  //                 user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )  
+  //               );
+  //               return {
+  //                 total: resp.total,
+  //                 usuarios
+  //               };
+  //             })
+  //           )
+  // }
+
+
+
+// Cargar Usuarios
+// cargarUsuarios() {
+
+//     const url = `${ base_url }/usuarios`;
 //     return this.http.get<CargarUsuario>( url, this.headers )
 //             .pipe(
 //               map( resp => {
@@ -171,27 +197,8 @@ export class UsersService {
 //               })
 //             )
 //   }
-
-// Cargar Usuarios
-
-/*
-cargarUsuarios() {
-
-    const url = `${ base_url }/usuarios`;
-    return this.http.get<CargarUsuario>( url, this.headers )
-            .pipe(
-              map( resp => {
-                const usuarios = resp.usuarios.map( 
-                  user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )  
-                );
-                return {
-                  total: resp.total,
-                  usuarios
-                };
-              })
-            )
-  }
-  */
+  // Fin Cargar Usuarios
+  
 
 
 /*
@@ -214,3 +221,5 @@ cargarUsuarios() {
   }
 
 }
+
+

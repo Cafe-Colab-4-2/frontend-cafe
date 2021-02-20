@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { UsersService } from '../../../services/users.service';
@@ -9,25 +9,31 @@ import { UsersService } from '../../../services/users.service';
   styles: [
   ]
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent {
 
-  nuevoUsuario: false;
+  nuevoUsuario = true;
 
   public formSubmitted = false;
 
   public registerForm = this.fb.group({
-    name: ['Rudy', Validators.required],
-    email: [ 'test1@test.com', [Validators.required, Validators.email] ],
-    password: [ '0000', Validators.required ],
-    password2: [ '0000', Validators.required ],
+    nombre: ['', Validators.required],
+    email: [ '', [Validators.required, Validators.email] ],
+    password: [ '', Validators.required ],
+    password2: [ '', Validators.required ],
     terminos: [ true, Validators.required ]
   }, {
     validators: this.passwordsIguales('password', 'password2')
   }  );
 
-  constructor( private fb: FormBuilder, private userService: UsersService ) { }
+  constructor( 
+                private fb: FormBuilder, 
+                private userService: UsersService ) { }
 
-  ngOnInit(): void { }
+  
+  // Logout
+  logOut() {
+    localStorage.removeItem('token');
+  }
 
   crearUsuario() {
     this.formSubmitted = true;
@@ -42,9 +48,14 @@ export class UsersComponent implements OnInit {
       .subscribe( (resp) => {
         console.log('Usuario creado');
         console.log(resp);
+        Swal.fire('Creado:', 'Usuario Creado Correctamente', 'success');
+
+        // Se oculta el formulario si el usuario fue creado correctamente
+        // this.nuevoUsuario = false;
+
       }, (err) => {
-        Swal.fire('Error: ', err.error.msg, 'error')
-        // console.log(err.error);
+        Swal.fire('Error: ', err.error.msg, 'error');
+        console.log(err.error);
         
       }
       );
