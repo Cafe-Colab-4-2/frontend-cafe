@@ -14,6 +14,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { UsersComponent } from './mantenimientos/users/users.component';
     PromisesComponent,
     RxjsComponent,
     UsersComponent,
+    ProfileComponent,
 
   ],
   exports: [

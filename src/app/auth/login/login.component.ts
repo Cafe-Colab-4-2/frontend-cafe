@@ -21,17 +21,12 @@ export class LoginComponent implements OnInit {
     remember: [true]
   });
 
-  constructor( private router: Router, private fb: FormBuilder, private usersService: UsersService ) { 
-
-  }
+  constructor( private router: Router, private fb: FormBuilder, private usersService: UsersService ) { }
 
   ngOnInit(): void {}
 
- 
-
-
+  
   loginUsuario() {
-    
     
     this.formSubmitted = true;
     // Realizar Posteo USERS.SERVICE
@@ -51,7 +46,7 @@ export class LoginComponent implements OnInit {
 
       
     }, (err) => {
-        Swal.fire('Error', err.error.msg, 'error')
+        Swal.fire('Error', err.error.msg, 'error');
         // console.warn('ERROR: ', err.error.errors);
       }
     );

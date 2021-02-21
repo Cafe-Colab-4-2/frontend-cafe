@@ -24,6 +24,7 @@ export class UsersService {
   public auth2: any;
   public usuario: Usuario;
 
+
   constructor( private http: HttpClient, 
                 private router: Router,
                 private ngZone: NgZone ) {
@@ -37,7 +38,7 @@ export class UsersService {
   }
 
   get uid():string {
-    return this.usuario.uid || '';
+    return this.usuario._id || '';
   }
 
   get headers() {
@@ -93,8 +94,9 @@ export class UsersService {
       }),
       map( (resp: any) => {
         // nombre email role google activo img
-        const { email, google, nombre, role, activo, img, uid } = resp.usuario;
-        this.usuario = new Usuario( nombre, email, '',  activo, img, google, role, uid );
+        const { email, google, nombre, role, activo, img = '', uid, _id } = resp.usuario;
+        this.usuario = new Usuario( nombre, email, '',  activo, img, google, role, _id );
+        console.log( resp.usuario);
 
         return true;
       }),
@@ -121,18 +123,15 @@ export class UsersService {
   
 
   // Actualizar Perfil
-  /*
   actualizarPerfil( data: { email: string, nombre: string, role: string } ) {
 
     data = {
       ...data,
       role: this.usuario.role
     }
-
     return this.http.put(`${ base_url }/usuarios/${ this.uid }`, data, this.headers );
-
   }
-  */
+  
 
   // LogIn
   logIn( formData: LoginForm ) {
