@@ -8,13 +8,13 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li class="user-profile">
-                            <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img src="./assets/images/users/profile.png" alt="user" /><span class="hide-menu">Steave Jobs </span></a>
+                            <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img [src]="usuario.getImage" alt="user" /><span class="hide-menu"> {{ usuario.nombre }} </span></a>
                             <ul aria-expanded="false" class="collapse">
-                                <li><a href="javascript:void()">My Profile </a></li>
+                                <li><a routerLink="./profile" routerLinkActive="active">My Profile </a></li>
                                 <li><a href="javascript:void()">My Balance</a></li>
                                 <li><a href="javascript:void()">Inbox</a></li>
                                 <li><a routerLink="/dashboard/account-settings">Account Setting</a></li>
-                                <li><a routerLink="/login">Logout</a></li>
+                                <li><a routerLink="/login" (click)="logOut()">Logout</a></li>
                             </ul>
                         </li>
                         <li class="nav-devider"></li>
@@ -33,7 +33,10 @@
 
                             <ul aria-expanded="false" class="collapse">
                                 <li *ngFor="let subItem of item.submenu">
-                                    <a [routerLink]="subItem.url"> {{ subItem.titulo }} </a>
+                                    <a 
+                                    [routerLink]="subItem.url"
+                                    routerLinkActive="active"
+                                    [routerLinkActiveOptions]="{ exact : true}"> {{ subItem.titulo }} </a>
                                 </li>
                             </ul>
                         </li>
