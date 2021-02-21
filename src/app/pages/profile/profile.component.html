@@ -1,0 +1,76 @@
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">My User Profile</h4>
+                <h6 class="card-subtitle">Settings</h6>
+                
+                <form class="form p-t-20" 
+                        autocomplete="off"
+                        [formGroup]="perfilForm"
+                        (ngSubmit) = "actualizarPerfil()">
+                    <div class="form-group">
+                        <label for="exampleInputuname">User Name</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="ti-user"></i></div>
+                            <input type="text" class="form-control" id="exampleInputuname" placeholder="Username" formControlName="nombre">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="ti-email"></i></div>
+                            <input type="email" 
+                            class="form-control" 
+                            id="exampleInputEmail1" 
+                            placeholder="Enter email"
+                                formControlName="email">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-danger">
+                            <p *ngIf="campoNoValido('nombre')"> El nombre es obligatoria </p>
+                            <p *ngIf="campoNoValido('email')"> El correo es obligatorio </p>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                        <i class="fa fa-save"></i>
+                        Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>  
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Image</h4>
+                <h6 class="card-subtitle">User Image</h6>
+
+                <div class="text-center">
+                    <img *ngIf="!imgTemp" [src]="usuario.getImage" class="img-avatar">
+                    <img *ngIf="imgTemp"  [src]="imgTemp" class="img-avatar">
+                </div>
+
+                <br>
+                
+                <input type="file" (change)="cambiarImagen($event.target.files[0])">
+
+                <br> <br>
+
+                <button type="button" class="btn btn-success waves-effect waves-light m-r-10" [disabled]="!subirImagen" (click)="cargarImagen()">
+                    <i class="fa fa-save"></i>
+                    Save Image
+                </button>
+
+                <button type="button" class="btn btn-inverse" (click)="cancelar()">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
