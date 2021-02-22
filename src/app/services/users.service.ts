@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { Usuario } from '../models/usuario.model';
 import { LoginForm } from '../interfaces/login-form';
 import { RegisterForm } from '../interfaces/register-form';
+import { CargarUsuarios } from '../interfaces/cargar-usuarios';
 
 const base_url = environment.base_url;
 
@@ -160,6 +161,7 @@ export class UsersService {
   */
 
   // CARGAR USUARIOS CON PAGINACIÓN
+
   // cargarUsuarios( desde: number = 0 ) {
 
   //   const url = `${ base_url }/usuarios?desde=${ desde }`;
@@ -180,22 +182,22 @@ export class UsersService {
 
 
 // Cargar Usuarios
-// cargarUsuarios() {
+cargarUsuarios() {
 
-//     const url = `${ base_url }/usuarios`;
-//     return this.http.get<CargarUsuario>( url, this.headers )
-//             .pipe(
-//               map( resp => {
-//                 const usuarios = resp.usuarios.map( 
-//                   user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )  
-//                 );
-//                 return {
-//                   total: resp.total,
-//                   usuarios
-//                 };
-//               })
-//             )
-//   }
+    const url = `${ base_url }/usuarios`;
+    return this.http.get<CargarUsuarios>( url, this.headers )
+            .pipe(
+              map( resp => {
+                const usuarios = resp.usuarios.map( 
+                  user => new Usuario(user.nombre, user.email, '', user.activo , user.img, user.google, user.role, user._id )  
+                );
+                return {
+                  total: resp.total,
+                  usuarios
+                };
+              })
+            )
+  }
   // Fin Cargar Usuarios
   
 

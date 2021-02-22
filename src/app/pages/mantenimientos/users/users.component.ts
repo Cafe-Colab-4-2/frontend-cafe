@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { UsersService } from '../../../services/users.service';
+import { Usuario } from '../../../models/usuario.model';
 
 @Component({
   selector: 'app-users',
@@ -12,6 +13,8 @@ import { UsersService } from '../../../services/users.service';
 export class UsersComponent {
 
   nuevoUsuario = true;
+  public usuarios: Usuario[] = [];
+  public totalUsuarios: Number;
 
   public formSubmitted = false;
 
@@ -27,7 +30,9 @@ export class UsersComponent {
 
   constructor( 
                 private fb: FormBuilder, 
-                private userService: UsersService ) { }
+                private userService: UsersService ) { 
+                  this.cargarUsuarios();
+                }
 
   
   // Logout
@@ -100,6 +105,17 @@ export class UsersComponent {
         pass2Control.setErrors( {noEsIgual: true} );
       }
     }
+  }
+
+
+  cargarUsuarios(){
+    this.userService.cargarUsuarios()
+      .subscribe( resp => {
+        console.log(resp);
+        this.usuarios = resp.usuarios;
+        this.totalUsuarios = resp.total;
+        
+      });
   }
 
 }
