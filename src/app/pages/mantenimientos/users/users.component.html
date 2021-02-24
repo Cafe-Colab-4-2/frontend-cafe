@@ -5,13 +5,15 @@
 
                 <input  type="text"
                         class= "form-control"
-                        placeholder="Buscar Usuario ..." />
+                        placeholder="Search ..." 
+                        (keyup)="buscar(txtInputTermino.value)"
+                        #txtInputTermino/>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row animated fadeIn fast">
+<div class="row animated fadeIn fast" *ngIf="cargando">
     <div class="col-12">
 
         <div class="alert alert-info text-center">
@@ -24,11 +26,11 @@
 
 
 <!-- DESPLIEGUE DE INFORMACIÓN DE USUARIOS -->
-<div class="row">
+<div class="row fadeIn" *ngIf="!cargando"> 
     <div class="col-12">
     <div class="card">
     <div class="card-body">
-        <h4 class="card-title">Users</h4>
+        <h4 class="card-title">Users ({{ totalUsuarios }}) </h4>
         <h6 class="card-subtitle">Registered Users</h6>
         <!-- <button class="btn btn-success" (click)="nuevoUsuario = true" >Add User</button> -->
 
@@ -37,6 +39,7 @@
     <i class="mdi mdi-account-plus"></i>
     New User
   </button>
+  <br><br>
   
   <!-- Modal -->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -48,7 +51,7 @@
             <!-- Main wrapper - style you can find in pages.scss -->
             <!-- ============================================================== -->
             <section id="wrapper" 
-                    class="login-register login-sidebar" 
+                    class="login-register login-sidebar fadeIn" 
                     style="background-image:url(../assets/images/background/login-register.jpg);"
                     *ngIf="nuevoUsuario">
                 <div class="login-box card">
@@ -60,6 +63,7 @@
                                 (ngSubmit)="crearUsuario()">
                                 <a href="javascript:void(0)" class="text-center db"><img src="./assets/images/logo-dark-text.png" alt="Home"  width="20%"/></a>
                                 <h2 class="text-center"> <b> New User </b></h2>
+                                <br><br>
                             <div class="form-group m-t-20">
                                 <div class="col-xs-12">
                                     <input class="form-control"
@@ -124,36 +128,53 @@
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
-                    <tr>
-                        <th>Avatar</th>
+                    <tr class="text-center">
+                        <th class="w100">Avatar</th>
                         <th>Email</th>
                         <th>Name</th>
-                        <th>Role</th>
-                        <th>Auth</th>
-                        <th>Active</th>
-                        <th class="text-nowrap">Action</th>
+                        <th class="w100">Role</th>
+                        <th class="w100">Auth</th>
+                        <th class="w100">Active</th>
+                        <th class="text-nowrap w100">Action</th>
                     </tr>
                 </thead>
                 <tbody>            
                     <tr  *ngFor="let user of usuarios">
-                        <td> {{ user.img }} </td>
+                        <td class="text-center"> <img [src]="user.getImage" alt="Avatar de Usuario" class="avatar"> </td>
                         <td> {{ user.email }} </td>
                         <td> {{ user.nombre }} </td>
-                        <td> {{ user.role }} </td>
-                        <td> {{ user.google }} </td>
+                        <td> <select class="form-control">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select> {{ user.role }} </td>
+                        <td><span class="label label-success"> Email </span> </td>
                         <td> {{ user.activo }} </td>
                         
-                        <td class="text-nowrap">
-                            <a href="#" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                            <a href="#" data-toggle="tooltip" data-original-title="Close"> <i class="fa fa-close text-danger"></i> </a>
+                        <td class="text-nowrap text-center">
+                            <a data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                            <a data-toggle="tooltip" data-original-title="Close" (click)="eliminarUsuario(user)"> <i class="fa fa-close text-danger"></i> </a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <button class="btn btn-secondary">Previous</button>
-        &nbsp;
-        <button class="btn btn-secondary">Next</button>
+        <div *ngIf="txtInputTermino.value.length === 0">
+            <button (click)="cambiarPagina(-5)" class="btn btn-secondary">Previous</button>
+            &nbsp;
+            {{ desde + 1 }} - 
+
+            <label *ngIf="((desde + 5) > totalUsuarios)">
+                {{ totalUsuarios }}
+            </label>
+            <label *ngIf="!((desde + 5) > totalUsuarios)">
+                {{ desde + 5 }}
+            </label>
+            &nbsp;
+            <button  (click)="cambiarPagina(5)" class="btn btn-secondary">Next</button>
+        </div>
     </div>
 </div>
 </div>

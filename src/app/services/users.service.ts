@@ -161,30 +161,9 @@ export class UsersService {
   */
 
   // CARGAR USUARIOS CON PAGINACIÓN
+cargarUsuarios( desde: number = 0 ) {
 
-  // cargarUsuarios( desde: number = 0 ) {
-
-  //   const url = `${ base_url }/usuarios?desde=${ desde }`;
-  //   return this.http.get( url, this.headers )
-  //           .pipe(
-  //             map( resp => {
-  //               const usuarios = resp.usuarios.map( 
-  //                 user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )  
-  //               );
-  //               return {
-  //                 total: resp.total,
-  //                 usuarios
-  //               };
-  //             })
-  //           )
-  // }
-
-
-
-// Cargar Usuarios
-cargarUsuarios() {
-
-    const url = `${ base_url }/usuarios`;
+  const url = `${ base_url }/usuarios?desde=${ desde }`;
     return this.http.get<CargarUsuarios>( url, this.headers )
             .pipe(
               map( resp => {
@@ -202,14 +181,16 @@ cargarUsuarios() {
   
 
 
-/*
+
   eliminarUsuario( usuario: Usuario ) {
     
       // /usuarios/5eff3c5054f5efec174e9c84
-      const url = `${ base_url }/usuarios/${ usuario.uid }`;
+      const url = `${ base_url }/usuarios/${ usuario._id }`;
       return this.http.delete( url, this.headers );
   }
 
+
+/*
   guardarUsuario( usuario: Usuario ) {
 
     return this.http.put(`${ base_url }/usuarios/${ usuario.uid }`, usuario, this.headers );

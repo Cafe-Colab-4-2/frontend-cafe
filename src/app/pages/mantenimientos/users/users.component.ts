@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { UsersService } from '../../../services/users.service';
 import { Usuario } from '../../../models/usuario.model';
+import { BusquedasService } from '../../../services/busquedas.service';
 
 @Component({
   selector: 'app-users',
@@ -14,7 +15,10 @@ export class UsersComponent {
 
   nuevoUsuario = true;
   public usuarios: Usuario[] = [];
-  public totalUsuarios: Number;
+  public usuariosTemp: Usuario[] = [];
+  public totalUsuarios: number;
+  public desde: number = 0;
+  public cargando = true;
 
   public formSubmitted = false;
 
@@ -30,8 +34,10 @@ export class UsersComponent {
 
   constructor( 
                 private fb: FormBuilder, 
-                private userService: UsersService ) { 
+                private userService: UsersService,
+                private busquedaSerivce: BusquedasService ) { 
                   this.cargarUsuarios();
+                  this.cargando = true;
                 }
 
   
@@ -108,14 +114,94 @@ export class UsersComponent {
   }
 
 
-  cargarUsuarios(){
-    this.userService.cargarUsuarios()
+  cargarUsuarios( ){
+    this.userService.cargarUsuarios( this.desde  )
       .subscribe( resp => {
         console.log(resp);
         this.usuarios = resp.usuarios;
+        this.usuariosTemp = resp.usuarios;
         this.totalUsuarios = resp.total;
         
+      this.cargando = false;
       });
+  }
+
+  cambiarPagina( valor: number ) {
+    this.desde += valor;
+
+    if ( this.desde < 0 ) {
+      this.desde = 0;
+    } else if ( this.desde >= this.totalUsuarios ) {
+      this.desde -= valor; 
+    }
+
+    this.cargarUsuarios();
+  }
+
+  buscar( termino: string) {
+    if( termino.length === 0) {
+      return this.usuarios = [ ...this.usuariosTemp ];
+    }
+
+    this.busquedaSerivce.buscar( 'usuarios', termino)
+      .subscribe( resp => {
+        this.usuarios = resp
+      }
+      );
+    
+  }
+
+
+  eliminarUsuario( usuario: Usuario ) {
+
+  console.log(usuario);
+
+
+    const swal = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+    
+    swal.fire({
+      title: 'Delete user: ' + usuario.nombre + 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+
+      if(result.value) {
+        
+        if (result.isConfirmed) {
+          
+          this.userService.eliminarUsuario( usuario )
+            .subscribe( resp => {              
+              swal.fire(
+              'Deleted!',
+              'User has been deleted.',
+              'success'
+              )
+
+              this.cargarUsuarios();
+            });
+          
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swal.fire(
+            'Cancelled',
+            'User is safe :)',
+            'error'
+            )
+          }
+      }
+    })
   }
 
 }
