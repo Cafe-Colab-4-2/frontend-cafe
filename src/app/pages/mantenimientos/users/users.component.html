@@ -143,19 +143,31 @@
                         <td class="text-center"> <img [src]="user.getImage" alt="Avatar de Usuario" class="avatar"> </td>
                         <td> {{ user.email }} </td>
                         <td> {{ user.nombre }} </td>
-                        <td> <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select> {{ user.role }} </td>
+                        <td>
+                            <select 
+                            class="form-control w140"
+                            [(ngModel)]="user.role"
+                            (change)="modificarUsuario( user )"
+                            >
+                                <option value="ADMIN_ROLE">Admin</option>
+                                <option value="USER_ROLE">User</option>
+                            </select>
+                        </td>
                         <td><span class="label label-success"> Email </span> </td>
-                        <td> {{ user.activo }} </td>
+                        <td>
+                            <select 
+                            class="form-control w140"
+                            [(ngModel)]="user.activo"
+                            (change)="modificarUsuario( user )"
+                            >
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </td>
                         
                         <td class="text-nowrap text-center">
-                            <a data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                            <a data-toggle="tooltip" data-original-title="Close" (click)="eliminarUsuario(user)"> <i class="fa fa-close text-danger"></i> </a>
+                            <a *ngIf="userService.usuario.role === 'ADMIN_ROLE'" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                            <a data-toggle="tooltip" data-original-title="Close" (click)="eliminarUsuario(user)" class="cursor"> <i class="fa fa-close text-danger"></i> </a>
                         </td>
                     </tr>
                 </tbody>

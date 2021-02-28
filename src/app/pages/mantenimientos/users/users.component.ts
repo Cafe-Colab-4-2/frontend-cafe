@@ -34,7 +34,7 @@ export class UsersComponent {
 
   constructor( 
                 private fb: FormBuilder, 
-                private userService: UsersService,
+                public userService: UsersService,
                 private busquedaSerivce: BusquedasService ) { 
                   this.cargarUsuarios();
                   this.cargando = true;
@@ -154,7 +154,9 @@ export class UsersComponent {
 
   eliminarUsuario( usuario: Usuario ) {
 
-  console.log(usuario);
+  if ( usuario._id === this.userService.uid ){
+    return Swal.fire('Error: ', 'No esposible auto borrarse', 'error');
+  }
 
 
     const swal = Swal.mixin({
@@ -202,6 +204,16 @@ export class UsersComponent {
           }
       }
     })
+  }
+
+  modificarUsuario( user: Usuario, role: string ) {
+    this.userService.guardarUsuario(user)
+      .subscribe(
+        resp => {
+          console.log(resp);
+          this.cargarUsuarios()
+        }
+      );
   }
 
 }

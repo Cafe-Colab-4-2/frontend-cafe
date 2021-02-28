@@ -190,13 +190,13 @@ cargarUsuarios( desde: number = 0 ) {
   }
 
 
-/*
+
   guardarUsuario( usuario: Usuario ) {
 
-    return this.http.put(`${ base_url }/usuarios/${ usuario.uid }`, usuario, this.headers );
+    return this.http.put(`${ base_url }/usuarios/${ usuario._id }`, usuario, this.headers );
 
   }
-  */
+  
 
   postUser( formData: LoginForm) {
       console.log('creando usuario');
