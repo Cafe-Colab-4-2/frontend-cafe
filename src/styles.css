@@ -16,3 +16,16 @@
     height: 220px;
     border-radius: 10%;
 }
+
+.w100 {
+    width: 100px;
+}
+
+.w140 {
+    width: 140px;
+}
+
+.avatar {
+    width: 60px;
+    border-radius: 100%;
+}

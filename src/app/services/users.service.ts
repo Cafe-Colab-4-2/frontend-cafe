@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { Usuario } from '../models/usuario.model';
 import { LoginForm } from '../interfaces/login-form';
 import { RegisterForm } from '../interfaces/register-form';
+import { CargarUsuarios } from '../interfaces/cargar-usuarios';
 
 const base_url = environment.base_url;
 
@@ -160,60 +161,42 @@ export class UsersService {
   */
 
   // CARGAR USUARIOS CON PAGINACIÓN
-  // cargarUsuarios( desde: number = 0 ) {
+cargarUsuarios( desde: number = 0 ) {
 
-  //   const url = `${ base_url }/usuarios?desde=${ desde }`;
-  //   return this.http.get( url, this.headers )
-  //           .pipe(
-  //             map( resp => {
-  //               const usuarios = resp.usuarios.map( 
-  //                 user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )  
-  //               );
-  //               return {
-  //                 total: resp.total,
-  //                 usuarios
-  //               };
-  //             })
-  //           )
-  // }
-
-
-
-// Cargar Usuarios
-// cargarUsuarios() {
-
-//     const url = `${ base_url }/usuarios`;
-//     return this.http.get<CargarUsuario>( url, this.headers )
-//             .pipe(
-//               map( resp => {
-//                 const usuarios = resp.usuarios.map( 
-//                   user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )  
-//                 );
-//                 return {
-//                   total: resp.total,
-//                   usuarios
-//                 };
-//               })
-//             )
-//   }
+  const url = `${ base_url }/usuarios?desde=${ desde }`;
+    return this.http.get<CargarUsuarios>( url, this.headers )
+            .pipe(
+              map( resp => {
+                const usuarios = resp.usuarios.map( 
+                  user => new Usuario(user.nombre, user.email, '', user.activo , user.img, user.google, user.role, user._id )  
+                );
+                return {
+                  total: resp.total,
+                  usuarios
+                };
+              })
+            )
+  }
   // Fin Cargar Usuarios
   
 
 
-/*
+
   eliminarUsuario( usuario: Usuario ) {
     
       // /usuarios/5eff3c5054f5efec174e9c84
-      const url = `${ base_url }/usuarios/${ usuario.uid }`;
+      const url = `${ base_url }/usuarios/${ usuario._id }`;
       return this.http.delete( url, this.headers );
   }
 
+
+
   guardarUsuario( usuario: Usuario ) {
 
-    return this.http.put(`${ base_url }/usuarios/${ usuario.uid }`, usuario, this.headers );
+    return this.http.put(`${ base_url }/usuarios/${ usuario._id }`, usuario, this.headers );
 
   }
-  */
+  
 
   postUser( formData: LoginForm) {
       console.log('creando usuario');
