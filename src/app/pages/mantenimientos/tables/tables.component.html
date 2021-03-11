@@ -1,0 +1,42 @@
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="example-boundary">
+
+                    <div *ngFor="let mesa of mesas; index as i;"
+                        class="card bg-primary p-3 text-center text-white cursor" 
+                        style="width: 15%; border-radius: 10px; margin: 10px;"
+                        cdkDrag (cdkDragEnded)="getPosition($event, i)" 
+                        cdkDragBoundary=".example-boundary" 
+                        [cdkDragFreeDragPosition]="mesa.dragPosition"
+                        (click)="desplegarProductos()"
+                        >
+                        
+                        <h2 class="card-title text-white">Mesa</h2>
+                        <h1 class="text-white"><b> {{ mesa.no }} </b></h1>
+                        <footer>
+                            <small>
+                                {{ mesa.sillas }} sillas
+                            </small>
+                        </footer>
+
+                        <div class="example-handle" cdkDragHandle>
+                            <i class="fa fa-arrows-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div>
+    <label *ngFor='let producto of productos'>
+        Description: {{ producto.stock }} - Price: {{ producto.precio_venta }}
+    </label>
+</div>
+
+

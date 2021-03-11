@@ -35,14 +35,14 @@
         <!-- <button class="btn btn-success" (click)="nuevoUsuario = true" >Add User</button> -->
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#newUserModal" (click)="editarUsuario = false; formulario()"  *ngIf="userService.usuario.role === 'ADMIN_ROLE'">
     <i class="mdi mdi-account-plus"></i>
     New User
-  </button>
+</button>
   <br><br>
   
   <!-- Modal -->
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal fade" id="newUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-body">
@@ -52,11 +52,16 @@
             <!-- ============================================================== -->
             <section id="wrapper" 
                     class="login-register login-sidebar fadeIn" 
-                    style="background-image:url(../assets/images/background/login-register.jpg);"
                     *ngIf="nuevoUsuario">
                 <div class="login-box card">
                     <div class="card-body">
-                        <form class="form-horizontal form-material" 
+
+                        <!-- ============================================================== -->
+                        <!-- FORMULARIO PARA REGISTRO DE USUARIOS -->
+                        <!-- ============================================================== -->
+                        <form 
+                                *ngIf="!editarUsuario"
+                                class="form-horizontal form-material" 
                                 id="loginform" 
                                 autocomplete="off"
                                 [formGroup]="registerForm"
@@ -99,13 +104,77 @@
                             </div>
                             <div class="form-group text-center m-t-20">
                                 <div class="col-xs-12">
-                                    <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">
+                                    <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light cursor" type="submit">
                                         <i class="mdi mdi-account-plus"></i>
                                         Add User
                                     </button>
                                 </div>
                             </div>
                         </form>
+                        <!-- ============================================================== -->
+                        <!-- FIN DE FORMULARIO PAR REGISTRO -->
+                        <!-- ============================================================== -->
+
+
+                        <!-- ============================================================== -->
+                        <!-- FORMULARIO / EDICION DE USUARIO -->
+                        <!-- ============================================================== -->
+                        <form 
+                                *ngIf="editarUsuario"
+                                class="form-horizontal form-material" 
+                                id="loginform" 
+                                autocomplete="off"
+                                [formGroup]="registerForm"
+                                (ngSubmit)="actualizarPerfil()">
+                                <a href="javascript:void(0)" class="text-center db"><img src="./assets/images/logo-dark-text.png" alt="Home"  width="20%"/></a>
+                                <h2 class="text-center"> <b> New User </b></h2>
+                                <br><br>
+                            <div class="form-group m-t-20">
+                                <div class="col-xs-12">
+                                    <input class="form-control"
+                                        type="text" 
+                                        required="" 
+                                        placeholder="Name"
+                                        formControlName="nombre">
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <div class="col-xs-12">
+                                    <input class="form-control border-primary" type="text" required="" placeholder="Email" formControlName="email">
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <div class="col-xs-12">
+                                    <input class="form-control" type="password" required="" placeholder="Password" formControlName="password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <input class="form-control" type="password" required="" placeholder="Confirm Password"  formControlName="password2">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-danger">
+                                    <p *ngIf="campoNoValido('nombre')">* Name is required </p>
+                                    <p *ngIf="campoNoValido('email')">* Email is required </p>
+                                    <p *ngIf="campoNoValido('password')">* Password is required </p>
+                                    <p *ngIf="contraseniasNoValidas()">* Passwords must be the same </p>
+                                    <p *ngIf="aceptaTerminos()">* Must accept terms </p>
+                                </div>
+                            </div>
+                            <div class="form-group text-center m-t-20">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light cursor" type="submit">
+                                        <i class="mdi mdi-account-edit"></i>
+                                        Edit User
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- ============================================================== -->
+                        <!-- FIN FORMULARIO / EDICION DE USUARIO -->
+                        <!-- ============================================================== -->
+
                     </div>
                 </div>
             </section>
@@ -148,6 +217,7 @@
                             class="form-control w140"
                             [(ngModel)]="user.role"
                             (change)="modificarUsuario( user )"
+                            *ngIf="userService.usuario.role === 'ADMIN_ROLE'"
                             >
                                 <option value="ADMIN_ROLE">Admin</option>
                                 <option value="USER_ROLE">User</option>
@@ -159,14 +229,15 @@
                             class="form-control w140"
                             [(ngModel)]="user.activo"
                             (change)="modificarUsuario( user )"
+                            *ngIf="userService.usuario.role === 'ADMIN_ROLE'"
                             >
                                 <option value="true">Active</option>
                                 <option value="false">Inactive</option>
                             </select>
                         </td>
                         
-                        <td class="text-nowrap text-center">
-                            <a *ngIf="userService.usuario.role === 'ADMIN_ROLE'" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                        <td class="text-nowrap text-center" *ngIf="userService.usuario.role === 'ADMIN_ROLE'">
+                            <a data-toggle="modal"  data-original-title="Edit"   (click)="cargarUsuario(user)" data-target="#newUserModal"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
                             <a data-toggle="tooltip" data-original-title="Close" (click)="eliminarUsuario(user)" class="cursor"> <i class="fa fa-close text-danger"></i> </a>
                         </td>
                     </tr>

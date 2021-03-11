@@ -13,29 +13,24 @@ import { BusquedasService } from '../../../services/busquedas.service';
 })
 export class UsersComponent {
 
-  nuevoUsuario = true;
+  public nuevoUsuario = true;
+  public editarUsuario = false;
   public usuarios: Usuario[] = [];
   public usuariosTemp: Usuario[] = [];
   public totalUsuarios: number;
   public desde: number = 0;
   public cargando = true;
+  public editinUserId: string;
 
   public formSubmitted = false;
 
-  public registerForm = this.fb.group({
-    nombre: ['', Validators.required],
-    email: [ '', [Validators.required, Validators.email] ],
-    password: [ '', Validators.required ],
-    password2: [ '', Validators.required ],
-    terminos: [ true, Validators.required ]
-  }, {
-    validators: this.passwordsIguales('password', 'password2')
-  }  );
+  public registerForm: FormGroup;
 
   constructor( 
                 private fb: FormBuilder, 
                 public userService: UsersService,
                 private busquedaSerivce: BusquedasService ) { 
+                  this.formulario();
                   this.cargarUsuarios();
                   this.cargando = true;
                 }
@@ -46,9 +41,22 @@ export class UsersComponent {
     localStorage.removeItem('token');
   }
 
+  formulario() {
+    this.registerForm = this.fb.group({
+      nombre: ['', Validators.required],
+      email: [ '', [Validators.required, Validators.email] ],
+      password: [ '', Validators.required ],
+      password2: [ '', Validators.required ],
+      terminos: [ true, Validators.required ]
+    }, {
+      validators: this.passwordsIguales('password', 'password2')
+    }  );
+  }
+
   crearUsuario() {
+    this.editarUsuario = false;
     this.formSubmitted = true;
-    console.log(this.registerForm.value);
+
 
     if( this.registerForm.invalid ) {
       return;
@@ -67,7 +75,6 @@ export class UsersComponent {
       }, (err) => {
         Swal.fire('Error: ', err.error.msg, 'error');
         console.log(err.error);
-        
       }
       );
   }
@@ -153,7 +160,7 @@ export class UsersComponent {
 
 
   eliminarUsuario( usuario: Usuario ) {
-
+  this.editarUsuario = false;
   if ( usuario._id === this.userService.uid ){
     return Swal.fire('Error: ', 'No esposible auto borrarse', 'error');
   }
@@ -196,6 +203,7 @@ export class UsersComponent {
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
         ) {
+          
           swal.fire(
             'Cancelled',
             'User is safe :)',
@@ -206,14 +214,37 @@ export class UsersComponent {
     })
   }
 
-  modificarUsuario( user: Usuario, role: string ) {
-    this.userService.guardarUsuario(user)
-      .subscribe(
-        resp => {
-          console.log(resp);
-          this.cargarUsuarios()
-        }
-      );
+  actualizarPerfil( ) {
+    console.log( this.registerForm.value );
+
+    if( this.registerForm.invalid ) {
+      return;
+    }
+
+    this.userService.actualizarUserPerfil( this.registerForm.value, this.editinUserId )
+        .subscribe( resp => {
+          Swal.fire('Actualización Correcta', this.registerForm.get('nombre').value, 'success');
+          this.cargarUsuarios();
+        }, (err) => {
+          Swal.fire('Error', err.error.msg, 'error');
+        })
+    
+  }
+
+  cargarUsuario(usuario: Usuario) {
+    this.editinUserId = usuario._id;
+    console.log('Id Usuario:', this.editinUserId);
+    
+    this.editarUsuario = true;
+    this.registerForm = this.fb.group({
+      nombre: [usuario.nombre, Validators.required],
+      email: [ usuario.email,  [Validators.required, Validators.email] ],
+      password: [ usuario.password, Validators.required ],
+      password2: [ usuario.password, Validators.required ],
+      terminos: [ true ]
+    }, {
+      validators: this.passwordsIguales('password', 'password2')
+    } );
   }
 
 }

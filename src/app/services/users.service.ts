@@ -28,11 +28,7 @@ export class UsersService {
 
   constructor( private http: HttpClient, 
                 private router: Router,
-                private ngZone: NgZone ) {
-
-    // this.googleInit();
-    
-  }
+                private ngZone: NgZone ) { }
 
   get token(): string {
     return localStorage.getItem('token') || '';
@@ -50,32 +46,9 @@ export class UsersService {
     }
   }
 
-  /*
-  googleInit() {
-
-    return new Promise( resolve => {
-      gapi.load('auth2', () => {
-        this.auth2 = gapi.auth2.init({
-          client_id: '1045072534136-oqkjcjvo449uls0bttgvl3aejelh22f5.apps.googleusercontent.com',
-          cookiepolicy: 'single_host_origin',
-        });
-
-        resolve();
-      });
-    })
-
-  }
-  */
 
   logOut() {
     localStorage.removeItem('token');
-
-    // this.auth2.signOut().then(() => {
-
-    //   this.ngZone.run(() => {
-    //     this.router.navigateByUrl('/login');
-    //   })
-    // });
 
       this.ngZone.run(() => {
         this.router.navigateByUrl('/login');
@@ -124,7 +97,7 @@ export class UsersService {
   
 
   // Actualizar Perfil
-  actualizarPerfil( data: { email: string, nombre: string, role: string } ) {
+  actualizarPerfil( data: { email: string, nombre: string, role: string, password: string, password2: string } ) {
 
     data = {
       ...data,
@@ -147,18 +120,6 @@ export class UsersService {
   }
   // Fin LogIn
 
-  /*
-  loginGoogle( token ) {
-    
-    return this.http.post(`${ base_url }/login/google`, { token } )
-                .pipe(
-                  tap( (resp: any) => {
-                    localStorage.setItem('token', resp.token )
-                  })
-                );
-
-  }
-  */
 
   // CARGAR USUARIOS CON PAGINACIÓN
 cargarUsuarios( desde: number = 0 ) {
@@ -191,10 +152,20 @@ cargarUsuarios( desde: number = 0 ) {
 
 
 
-  guardarUsuario( usuario: Usuario ) {
+  guardarUsuario( usuario: Usuario, usuarioId: string ) {
 
-    return this.http.put(`${ base_url }/usuarios/${ usuario._id }`, usuario, this.headers );
+    return this.http.put(`${ base_url }/usuarios/${ usuarioId }`, usuario, this.headers );
 
+  }
+
+   // Actualizar Perfil
+   actualizarUserPerfil( data: { email: string, nombre: string, role: string, password: string, password2: string }, userId: string ) {
+
+    data = {
+      ...data,
+      role: this.usuario.role
+    }
+    return this.http.put(`${ base_url }/usuarios/${ userId }`, data, this.headers );
   }
   
 
