@@ -26,6 +26,7 @@ export class UsersComponent {
 
   public registerForm: FormGroup;
 
+
   constructor( 
                 private fb: FormBuilder, 
                 public userService: UsersService,
@@ -42,6 +43,7 @@ export class UsersComponent {
   }
 
   formulario() {
+
     this.registerForm = this.fb.group({
       nombre: ['', Validators.required],
       email: [ '', [Validators.required, Validators.email] ],
@@ -212,6 +214,19 @@ export class UsersComponent {
           }
       }
     })
+  }
+
+  modificarUsuario( user: Usuario ) {
+
+      console.log(this.registerForm.value, user);
+      
+    this.userService.guardarUsuario(user)
+      .subscribe(
+        resp => {
+          console.log(resp);
+          this.cargarUsuarios()
+        }
+      );
   }
 
   actualizarPerfil( ) {
