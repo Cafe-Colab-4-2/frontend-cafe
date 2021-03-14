@@ -139,8 +139,6 @@ cargarUsuarios( desde: number = 0 ) {
             )
   }
   // Fin Cargar Usuarios
-  
-
 
 
   eliminarUsuario( usuario: Usuario ) {
@@ -159,19 +157,15 @@ cargarUsuarios( desde: number = 0 ) {
   }
 
    // Actualizar Perfil
-   actualizarUserPerfil( data: { email: string, nombre: string, role: string, password: string, password2: string }, userId: string ) {
+   actualizarUserPerfil( data: { email: string, nombre: string, role: string, password: string, password2: string }, userId: string, userRole: string ) {
 
     data = {
       ...data,
-      role: this.usuario.role
+      role: userRole
     }
     return this.http.put(`${ base_url }/usuarios/${ userId }`, data, this.headers );
   }
-  
 
-  postUser( formData: LoginForm) {
-      console.log('creando usuario');
-  }
 
 }
 
