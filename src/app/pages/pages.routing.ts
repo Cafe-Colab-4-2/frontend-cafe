@@ -26,7 +26,7 @@ const routes: Routes = [
           { path: 'rxjs',             component: RxjsComponent,             data: { titulo: 'Rxjs'} },
           { path: 'users',            component: UsersComponent,            data: { titulo: 'Users of App'} },
           { path: 'profile',          component: ProfileComponent,           data: { titulo: 'My Profile'} },
-          { path: "detallefactura"    component: ListardetalleComponent,    data: { titulo: 'Detalle Factura'}
+          { path: "detallefactura",    component: ListardetalleComponent,    data: { titulo: 'Detalle Factura'}}
         ]
       },
 
