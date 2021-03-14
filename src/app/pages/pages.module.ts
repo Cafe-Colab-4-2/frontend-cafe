@@ -15,6 +15,7 @@ import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { ProfileComponent } from './profile/profile.component';
     RxjsComponent,
     UsersComponent,
     ProfileComponent,
+    ListardetalleComponent,
 
   ],
   exports: [

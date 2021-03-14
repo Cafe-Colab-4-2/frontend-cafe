@@ -1,3 +1,4 @@
+import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from '../guards/auth.guard';
@@ -13,8 +14,8 @@ import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
-    { 
-        path: 'dashboard', 
+    {
+        path: 'dashboard',
         component: PagesComponent,
         canActivate: [ AuthGuard ],
         children: [
@@ -24,7 +25,8 @@ const routes: Routes = [
           { path: 'promises',         component: PromisesComponent,         data: { titulo: 'Promises'} },
           { path: 'rxjs',             component: RxjsComponent,             data: { titulo: 'Rxjs'} },
           { path: 'users',            component: UsersComponent,            data: { titulo: 'Users of App'} },
-          { path: 'profile',          component: ProfileComponent,           data: { titulo: 'My Profile'} },  
+          { path: 'profile',          component: ProfileComponent,           data: { titulo: 'My Profile'} },
+          { path: "detallefactura"    component: ListardetalleComponent,    data: { titulo: 'Detalle Factura'}
         ]
       },
 
