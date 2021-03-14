@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 import { Usuario } from '../models/usuario.model';
+import { Producto } from '../models/producto.model';
 
 const base_url = environment.base_url;
 
@@ -33,6 +34,14 @@ export class BusquedasService {
     );
 
   }
+  private transformarProductos( resultados: any[]): Producto[] {
+    return resultados.map(
+      producto => new Producto(producto.categoria, producto.presentacion, producto.descripcion, producto.activo, producto.usuario, producto.stock, producto.precio_venta, producto.img, producto._id) 
+    );
+
+  }
+
+
 
   buscar( 
       tipo: 'usuarios' | 'proveedores' | 'clientes' | 'productos',
@@ -47,10 +56,15 @@ export class BusquedasService {
                 case 'usuarios':
                   return this.transformarUsuarios( resp.resultados )
                   break;
+
+                case 'productos':
+                  return this.transformarProductos( resp.resultados )
+                  break;
               
                 default:
                   break;
               }
+
             } )
           );
   }

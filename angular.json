@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "cafe-frontend"
+    }
+  },
+  "defaultProject": "cafe-frontend",
+  "cli": {
+    "analytics": false
+  }
 }

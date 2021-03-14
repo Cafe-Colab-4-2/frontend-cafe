@@ -14,6 +14,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
+import { ProductComponent } from './mantenimientos/productos/productos.component';
 import { ProfileComponent } from './profile/profile.component';
 
 
@@ -26,6 +27,7 @@ import { ProfileComponent } from './profile/profile.component';
     PromisesComponent,
     RxjsComponent,
     UsersComponent,
+    ProductComponent,
     ProfileComponent,
 
   ],
