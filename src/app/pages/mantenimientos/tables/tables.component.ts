@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Mesa } from '../../../models/mesa.model';
 import { Producto } from '../../../models/productos.model';
 import Swal from 'sweetalert2';
-import { Pedido } from '../../../models/pedidos.model';
+import { Pedido, CostosTotalesMesas } from '../../../models/pedidos.model';
 import { ProductService } from '../../../services/product.service';
 
 @Component({
@@ -21,137 +21,30 @@ export class TablesComponent implements OnInit {
   public precio_venta = 0;
   public desde: number = 0;
   public totalProductos: number;
+  public costoMesaTemp: number;
+  // public totalCostosPedidosMesas: CostosTotalesMesas[] = [];  
+  public totalCostosPedidosMesas: CostosTotalesMesas[] = [ ];  
 
 
   public mesas: Mesa[] = [
-                  { 'no': 1, 'sillas': 10, 'dragPosition': {x: 200, y: 10} },
-                  { 'no': 2, 'sillas': 3, 'dragPosition': {x: 150, y: 20} },
-                  { 'no': 3, 'sillas': 8, 'dragPosition': {x: 300, y: 20} },
-                  { 'no': 4, 'sillas': 4, 'dragPosition': {x: 200, y: 10} },
-                  { 'no': 5, 'sillas': 3, 'dragPosition': {x: 150, y: 20} },
-                  { 'no': 6, 'sillas': 8, 'dragPosition': {x: 300, y: 20} },
-                  { 'no': 7, 'sillas': 4, 'dragPosition': {x: 200, y: 10} },
-                  { 'no': 8, 'sillas': 3, 'dragPosition': {x: 150, y: 20} },
-                  { 'no': 9, 'sillas': 8, 'dragPosition': {x: 300, y: 20} },
-                  { 'no': 10, 'sillas': 4, 'dragPosition': {x: 200, y: 10} },
-                  { 'no': 11, 'sillas': 3, 'dragPosition': {x: 150, y: 20} },
-                  { 'no': 12, 'sillas': 8, 'dragPosition': {x: 300, y: 20} },
+                  { 'no': 1, 'sillas': 10, 'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 2, 'sillas': 3,  'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 3, 'sillas': 8,  'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 4, 'sillas': 4,  'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 5, 'sillas': 3,  'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 6, 'sillas': 8,  'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 7, 'sillas': 4,  'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 8, 'sillas': 3,  'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 9, 'sillas': 8,  'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 10, 'sillas': 4, 'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 11, 'sillas': 3, 'productos': [], 'total': 0, 'occuped': false },
+                  { 'no': 12, 'sillas': 8, 'productos': [], 'total': 0, 'occuped': false },
                         ];
 
-  // public productos: Producto[] = [
-  //   {
-  //     "id": 1,
-  //     "descripcion": "Cafe",
-  //     "precio_venta": 15.50,
-  //     "categoria": "CALIENTE",
-  //     "presentacion": "Mediano",
-  //     "stock": 10,
-  //     "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 2,
-  //   "descripcion": "Capuchino",
-  //   "precio_venta": 15.50,
-  //   "categoria": "CALIENTE",
-  //   "presentacion": "Mediano",
-  //   "stock": 10,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 3,
-  //   "descripcion": "Latte",
-  //   "precio_venta": 17,
-  //   "categoria": "CALIENTE",
-  //   "presentacion": "Mediano",
-  //   "stock": 20,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 4,
-  //   "descripcion": "Cafe",
-  //   "precio_venta": 17.50,
-  //   "categoria": "CALIENTE",
-  //   "presentacion": "Grande",
-  //   "stock": 10,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 5,
-  //   "descripcion": "Capuchino",
-  //   "precio_venta": 18.50,
-  //   "categoria": "CALIENTE",
-  //   "presentacion": "Grande",
-  //   "stock": 10,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 6,
-  //   "descripcion": "Latte",
-  //   "precio_venta": 17,
-  //   "categoria": "CALIENTE",
-  //   "presentacion": "Mediano",
-  //   "stock": 20,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 7,
-  //   "descripcion": "Coca Cola",
-  //   "precio_venta": 17,
-  //   "categoria": "FRIO",
-  //   "presentacion": "550ml",
-  //   "stock": 20,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 8,
-  //   "descripcion": "Coca Cola",
-  //   "precio_venta": 17,
-  //   "categoria": "FRIO",
-  //   "presentacion": "330ml",
-  //   "stock": 20,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 9,
-  //   "descripcion": "Coca Cola",
-  //   "precio_venta": 17,
-  //   "categoria": "FRIO",
-  //   "presentacion": "550ml",
-  //   "stock": 20,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 10,
-  //   "descripcion": "Coca Cola",
-  //   "precio_venta": 17,
-  //   "categoria": "FRIO",
-  //   "presentacion": "1000ml",
-  //   "stock": 20,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 11,
-  //   "descripcion": "Coca Cola",
-  //   "precio_venta": 17,
-  //   "categoria": "FRIO",
-  //   "presentacion": "350ml",
-  //   "stock": 20,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // },
-  // {
-  //   "id": 12,
-  //   "descripcion": "Coca Cola",
-  //   "precio_venta": 17,
-  //   "categoria": "FRIO",
-  //   "presentacion": "650ml",
-  //   "stock": 20,
-  //   "img": "../../../assets/images/gallery/chair.jpg"
-  // }
-  //                       ];
-
+  public pedidosLocal: Pedido[]= [];
   public productos: Producto[] = [];
   public productosTemp: Producto[] = [];
-  public pedidos: Producto[] = []
+  public pedidos: Producto[] = [];
 
   public pedido: Producto = {descripcion: '', precio_venta: 0, categoria: '', presentacion: '', stock: 0, activo: true, usuario: '', getImage: ''};
 
@@ -160,8 +53,12 @@ export class TablesComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarProductos();
-    this.verificaMesas();
-    this.mesas = this.ponerMesas();
+    // this.verificaMesas();
+    this.mesas = this.ponerMesaYDatos();
+  }
+
+  ponerMesasFromLocalStorage(){
+
   }
 
   verificaMesas() {
@@ -170,29 +67,17 @@ export class TablesComponent implements OnInit {
     
     if( existe === null) {
       localStorage.setItem('mesas', JSON.stringify(this.mesas));
-    }
+    } 
   }
 
-
-  getPosition(event: CdkDragEnd, noMesa: number){
-    // console.log(event.source.getFreeDragPosition()); // returns { x: 0, y: 0 }
-
-    this.mesas[noMesa].dragPosition.x = event.source.getFreeDragPosition().x;
-    this.mesas[noMesa].dragPosition.y = event.source.getFreeDragPosition().y;
-    
-    localStorage.setItem('mesas', JSON.stringify(this.mesas));
-    this.ponerMesas();
-  }
-
-  ponerMesas() {
-    // console.log(this.mesas);
+  ponerMesaYDatos() {
     return JSON.parse(localStorage.getItem('mesas'));
   }
 
   cargarProductos() {
     this.productService.cargarProductos(this.desde)
     .subscribe( resp => {
-      console.log(resp);
+      // console.log(resp);
       this.productos = resp.productos;
       this.productosTemp = resp.productos;
       this.totalProductos = resp.total;
@@ -203,25 +88,27 @@ export class TablesComponent implements OnInit {
   modalProductos(value: boolean) {
     this.modalOpcion = value;
     this.pedidos = [];
-    console.log('modal');
+    // console.log('modal');
     
   }
 
-  setNumeroMesa(mesa: number) {
+  cargaModal(noMesa: number) {
+    console.log('modal: ', noMesa);
+    
     this.modalProductos(true);
-    this.numeroMesa = mesa;
+    this.numeroMesa = noMesa;
+    this.pedidos = this.mesas[noMesa -1].productos;
   }
 
 
 
   agregarAPedido(product: Producto) {
-    console.log('Tamanio Pedidos: ', this.pedidos.length);
-
     if( this.pedidos.length == 0) {
       product.mesa = this.numeroMesa;
       product.cantidad = 1;
       this.pedidos.push(product);
-      console.log('Pedidos: ', this.pedidos.length);
+      this.mesas[product.mesa - 1].productos = this.pedidos;
+      this.mesas[product.mesa - 1].total += (product.precio_venta * product.cantidad);
     }
     else {
       const exi = this.pedidos.includes(product);
@@ -233,43 +120,52 @@ export class TablesComponent implements OnInit {
         product.mesa = this.numeroMesa;
         product.cantidad = 1;
         this.pedidos.push(product);
-        console.log('Pedidos: ', this.pedidos.length);
-        console.log('Existe: ', exi, 'NUEVO REGISTRO');
+        this.mesas[product.mesa - 1].productos = this.pedidos;
+        this.mesas[product.mesa  - 1].total += (product.precio_venta * product.cantidad);
       }
-    
-    }
-
-    
+    }    
   }
-
 
 
   setCantidadProducto(num: string, producto: Producto) {
 
     this.pedidos.forEach( pedido => {
 
-        if( (num == '+1' && pedido.descripcion == producto.descripcion) && pedido.presentacion == producto.presentacion ) {
-          producto.cantidad++;
+        if( num == '+1' && pedido._id == producto._id ) {
+          pedido.cantidad++;
+          this.mesas[producto.mesa - 1].total += pedido.precio_venta; 
         }
-        else if ((num == '-1' && pedido.descripcion == producto.descripcion) && pedido.presentacion == producto.presentacion ) {
-          if( this.cantidadProducto <= 1 ){
+        else if (num == '-1' && pedido._id == producto._id) {
+          if( pedido.cantidad <= 1 ){
             pedido.cantidad = 1;
           }
           else {
-            this.cantidadProducto--;
+            pedido.cantidad--;
+            this.mesas[producto.mesa - 1].total -= pedido.precio_venta ;
           }
       }
     });
 
   }
 
-  eliminarProductoDePedido(producto: Producto) {
-    let index = this.pedidos.indexOf(producto);
+  eliminarProductoDePedido(product: Producto) {
+    let index = this.pedidos.indexOf(product);
+    this.mesas[product.mesa - 1].total -= (product.precio_venta * product.cantidad);
     this.pedidos.splice( index, 1);
+    this.pedidosLocal[product.mesa - 1].productos = this.pedidos;
   }
 
   guardarTablas() {
-    localStorage.setItem('pedidos',  JSON.stringify(this.pedidos));
+    this.mesas[this.numeroMesa - 1].occuped = true;
+    localStorage.setItem('mesas',  JSON.stringify(this.mesas));
+  }
+
+  generarFactura() {
+    this.pedidos = [];
+    this.mesas[this.numeroMesa - 1].productos = [];
+    this.mesas[this.numeroMesa - 1].occuped = false;
+    this.mesas[this.numeroMesa - 1].total = 0;
+    localStorage.setItem('mesas',  JSON.stringify(this.mesas));
   }
 
 }

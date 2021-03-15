@@ -4,15 +4,19 @@
         <div class="card" >
             <div class="card-body" >
                 <div cdkDropList cdkDropListOrientation="horizontal" class="center-text-cards">
-                    <div class="card-mesas bg-primary p-3 text-center text-white cursor card-align" *ngFor="let mesa of mesas" data-toggle="modal" data-target="#modalProductos" (click)="setNumeroMesa(mesa.no)" cdkDrag>
-                    <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-                    <h3 class="card-title text-white">Mesa</h3>
-                        <h1 class="text-white"><b> {{ mesa.no }} </b></h1>
-                        <footer>
-                            <small>
-                                {{ mesa.sillas }} sillas
-                            </small>
-                        </footer>
+                    <div class="card-mesas bg-primary p-3 text-center text-white cursor card-align" *ngFor="let mesa of mesas" data-toggle="modal" data-target="#modalProductos" (click)="cargaModal(mesa.no)" cdkDrag>
+                        
+                            <small *ngIf="mesa.occuped"><b>Ocupado</b></small>
+                            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                            <h3 class="card-title text-white">Mesa</h3>
+                            <h1 class="text-white"><b> {{ mesa.no }} </b></h1>
+                            <footer>
+                                <small>
+                                    {{ mesa.sillas }} sillas
+                                </small>
+                            </footer>
+                        
+                       
                     </div>
                 </div>          
             </div>
@@ -101,8 +105,8 @@
                             <th>Sub Total</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="table-success" *ngFor="let pedido of pedidos; index as i">
+                    <!-- <tbody>
+                        <tr class="table-success" *ngFor="let pedido of pedidos">
                             <td>
                                 <a data-toggle="tooltip" data-original-title="Remove" class="cursor" (click)="eliminarProductoDePedido(pedido)"> <i class="fa fa-close text-danger"></i> </a>
                             </td>
@@ -122,20 +126,55 @@
                             </td>
                             
                         </tr>
-                        <tr >
-                            <td></td>
-                            <td></td>
-                            <td *ngFor>
-                                <h2>Total: Q. 0.00 </h2>
+                        
+
+                        <tr class="justify-content">
+                                <div *ngFor="let mesa of mesas" >
+                                    <h2 *ngIf="mesa.no  == numeroMesa" class="card-align"> Total: Q. {{ mesa.total }} </h2>
+                                </div>
+                        </tr>
+                        
+                    </tbody> -->
+                    
+
+                    <tbody>
+                        <tr class="table-success" *ngFor="let pedido of pedidos">
+                            <td>
+                                <a data-toggle="tooltip" data-original-title="Remove" class="cursor" (click)="eliminarProductoDePedido(pedido)"> <i class="fa fa-close text-danger"></i> </a>
                             </td>
+
+                            <td class="justify-content">
+                                <a data-toggle="tooltip" data-original-title="Decrease" class="cursor" (click)="setCantidadProducto('-1', pedido)"> <i class="fa fa-minus-square text-success"></i> </a>
+                                {{ pedido.cantidad }}
+                                <a data-toggle="tooltip" data-original-title="Increase" class="cursor" (click)="setCantidadProducto('+1', pedido)"> <i class="fa fa-plus-square text-success"></i> </a>
+                            </td>
+                            
+                            <td> {{ pedido.descripcion }}   </td>
+                            <td> {{ pedido.presentacion }} </td>
+                            <td> Q. {{ pedido.precio_venta }} <small>(c/u)</small></td>
+                        
+                            <td>
+                                Q. {{ pedido.cantidad * pedido.precio_venta }}
+                            </td>
+                            
+                        </tr>
+                        
+
+                        <tr class="justify-content">
+                                <div *ngFor="let mesa of mesas" >
+                                    <h2 *ngIf="mesa.no  == numeroMesa" class="card-align"> Total: Q. {{ mesa.total }} </h2>
+                                </div>
                         </tr>
                         
                     </tbody>
-                    
                 </table>
                 
             </div>
+
+            
+
             <a class="btn btn-success btn-lg active text-white" role="button" (click)="guardarTablas()">Save Table</a>
+            <a class="btn btn-danger btn-lg active text-white" role="button" (click)="generarFactura()">Close Table</a>
         </div>
       </div>
     </div>

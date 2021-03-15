@@ -1,5 +1,8 @@
+import { Producto } from './productos.model';
 export interface Mesa {
         no: number;
         sillas: number;
-        dragPosition: {x: number; y: number;};
+        productos: Producto[];
+        total: number;
+        occuped: boolean;
 }

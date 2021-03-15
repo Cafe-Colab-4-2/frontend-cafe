@@ -4,3 +4,8 @@ export interface Pedido {
     productos: Producto[];
     cantidad: number;
 }
+
+export interface CostosTotalesMesas {
+    total: number;
+    mesa: number;
+}
