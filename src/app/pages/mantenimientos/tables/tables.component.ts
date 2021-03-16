@@ -5,6 +5,13 @@ import { Producto } from '../../../models/productos.model';
 import Swal from 'sweetalert2';
 import { Pedido, CostosTotalesMesas } from '../../../models/pedidos.model';
 import { ProductService } from '../../../services/product.service';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { ClienteService } from '../../../services/client.service';
+import { Cliente } from '../../../models/cliente.model';
+import { Factura, DetalleFactura, FacturaForm } from '../../../interfaces/factura.forms';
+import { UsersService } from '../../../services/users.service';
+import { FacturaService } from '../../../services/factura.service';
+import { DetalleFacturaService } from '../../../services/detalle-factura.service';
 
 @Component({
   selector: 'app-tables',
@@ -12,6 +19,10 @@ import { ProductService } from '../../../services/product.service';
 })
 export class TablesComponent implements OnInit {
 
+  $txtInputTermino : string;
+
+  public factura = false;
+  public formSubmitted = false;
   public rows = new Array(10); 
   public cols = new Array(5);
   public modalOpcion = false;
@@ -22,6 +33,14 @@ export class TablesComponent implements OnInit {
   public desde: number = 0;
   public totalProductos: number;
   public costoMesaTemp: number;
+  public cliente: Cliente;
+  public client: any;
+  public clienteExiste = false;
+  public facturaTemp: Factura = {fecha: '', total_factura: 0, nombre_cliente: '', nit_cliente: '', usuario: '', _id: ''};
+  public fechaYHora = new Date();
+  public detalleFacturaTemp: DetalleFactura;
+  public facturaData: FacturaForm = { nombre_cliente: '', id_cliente: ''}
+  public habilitaBoton = false;
   // public totalCostosPedidosMesas: CostosTotalesMesas[] = [];  
   public totalCostosPedidosMesas: CostosTotalesMesas[] = [ ];  
 
@@ -49,16 +68,38 @@ export class TablesComponent implements OnInit {
   public pedido: Producto = {descripcion: '', precio_venta: 0, categoria: '', presentacion: '', stock: 0, activo: true, usuario: '', getImage: ''};
 
 
-  constructor( private productService: ProductService ) { }
+  public facturaForm: FormGroup;
+
+  constructor( 
+    private productService: ProductService,
+    private userService: UsersService,
+    private facturaService: FacturaService,
+    private detalleFacturaService: DetalleFacturaService,
+    private fb: FormBuilder,
+    private clientService: ClienteService ) { }
 
   ngOnInit(): void {
     this.cargarProductos();
     // this.verificaMesas();
     this.mesas = this.ponerMesaYDatos();
+    this.formulario();
   }
 
-  ponerMesasFromLocalStorage(){
+  formulario() {
+    this.facturaForm = this.fb.group({
+      nit: ['', Validators.required],
+      nombre: [ '', Validators.required, ],
+    }  );
+  }
 
+  
+  campoNoValido( campo: string): boolean {
+    if( this.facturaForm.get(campo).invalid && this.formSubmitted ) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   verificaMesas() {
@@ -93,11 +134,12 @@ export class TablesComponent implements OnInit {
   }
 
   cargaModal(noMesa: number) {
-    console.log('modal: ', noMesa);
+    this.factura = false;
     
     this.modalProductos(true);
     this.numeroMesa = noMesa;
     this.pedidos = this.mesas[noMesa -1].productos;
+    this.habilitaBotones(this.pedidos);
   }
 
 
@@ -123,7 +165,9 @@ export class TablesComponent implements OnInit {
         this.mesas[product.mesa - 1].productos = this.pedidos;
         this.mesas[product.mesa  - 1].total += (product.precio_venta * product.cantidad);
       }
-    }    
+    } 
+
+    this.habilitaBotones(this.mesas[this.numeroMesa - 1].productos);
   }
 
 
@@ -153,6 +197,8 @@ export class TablesComponent implements OnInit {
     this.mesas[product.mesa - 1].total -= (product.precio_venta * product.cantidad);
     this.pedidos.splice( index, 1);
     this.pedidosLocal[product.mesa - 1].productos = this.pedidos;
+
+    this.habilitaBotones(this.mesas[this.numeroMesa - 1].productos);
   }
 
   guardarTablas() {
@@ -160,12 +206,151 @@ export class TablesComponent implements OnInit {
     localStorage.setItem('mesas',  JSON.stringify(this.mesas));
   }
 
-  generarFactura() {
-    this.pedidos = [];
-    this.mesas[this.numeroMesa - 1].productos = [];
-    this.mesas[this.numeroMesa - 1].occuped = false;
-    this.mesas[this.numeroMesa - 1].total = 0;
+  actualizarDatosMesas() {
+    this.factura = true;
     localStorage.setItem('mesas',  JSON.stringify(this.mesas));
+
+    this.habilitaBotones(this.mesas[this.numeroMesa - 1].productos);
+  }
+  
+
+  generarFactura() {
+
+    this.formSubmitted = true;
+
+    if( this.facturaForm.invalid ) {
+      return;
+    }
+
+    this.factura = false;
+    
+    // Si el cliente ingresado no existe se Crea un nuevo registro de clientes
+    if(!this.clienteExiste) {
+        // CREACION DE NUEVO CLIENTE
+      this.clientService.crearCliente(this.facturaForm.value)
+      .subscribe( resp => {
+          let cli: Cliente;
+          cli = this.facturaForm.value;
+          this.client = resp; 
+          this.facturaTemp.nit_cliente = cli.nit;
+          this.facturaTemp.nombre_cliente = cli.nombre;
+          this.facturaTemp.id_cliente = this.client.cliente._id;
+
+          this.facturaData.id_cliente = this.client.cliente._id;
+          this.facturaData.nombre_cliente = this.client.cliente.nombre;
+    
+          // console.log('CREADOOOOOOOO', resp, ' TEMP CLIENT SERVICIO: ', this.facturaTemp);
+          this.generaNuevaFactura();
+
+          this.clienteExiste = false;
+          
+          // Swal.fire('Generado', 'Usuario Creado Correctamente', 'success');
+        }, (err) => {
+          Swal.fire('Error: ', err.error.msg, 'error');
+          // console.log(err.error);
+        }); 
+    } else {
+      Swal.fire('Existe', 'El Usuario Ya Existe', 'success');
+      this.generaNuevaFactura();
+    }
+      
+    // Se completa la informacion de la factura a crear
+    this.facturaTemp.fecha = new Date().toISOString();
+    this.facturaTemp.total_factura = this.mesas[this.numeroMesa -1 ].total;
+    this.facturaTemp.usuario = this.userService.uid;
+
+    
+    
+        
+
+      // GENERAR NUEVO DETALLE FACTURA
+      // this.pedidos.forEach(pedido => {
+      //   this.detalleFacturaTemp.cantidad = pedido.cantidad;
+      //   this.detalleFacturaTemp.id_factura = this.facturaTemp._id;
+      //   this.detalleFacturaTemp.id_producto = pedido._id;
+      //   this.detalleFacturaTemp.precio_unitario = pedido.precio_venta;
+      //   this.detalleFacturaTemp.total = pedido.cantidad * pedido.precio_venta;
+      //   this.detalleFacturaTemp.usuario = this.userService.uid;
+        
+      //   this.detalleFacturaService.crearDetalleFactura(this.detalleFacturaTemp)
+      //     .subscribe( resp => {
+      //         console.log('DETALLE FACTURA CREADOS: ', resp);
+      //     });
+      // });
+
+      
+
+    this.limpiarPedido();
+    this.habilitaBotones(this.pedidos);
+  }
+
+  generaNuevaFactura() {
+          // GENERAR NUEVA FACTURA
+          this.facturaService.crearFactura(this.facturaData)
+          .subscribe( res => {
+            this.facturaData = res;
+            // this.facturaTemp = res;
+            console.log('Factura Creada: ', res);
+            Swal.fire('Creado', 'Factura creada Correctamente', 'success');
+          }, (err) => {
+            Swal.fire('error', 'Error al crear Factura', 'error');
+            console.log(err);
+          })
+  }
+
+  getUser(nit: string) {
+    this.clientService.getCliente( Number(nit))
+      .subscribe( (resp ) => {
+          this.client = resp;   
+          this.facturaForm = this.fb.group({
+            nit: [ this.client.cliente.nit, Validators.required],
+            nombre: [this.client.cliente.nombre, Validators.required ],
+          });  
+
+          this.facturaTemp.nit_cliente = this.client.cliente.nit;
+          this.facturaTemp.nombre_cliente = this.client.cliente.nombre;
+          this.facturaTemp.id_cliente = this.client.cliente._id;
+
+          this.facturaData.id_cliente = this.client.cliente._id;
+          this.facturaData.nombre_cliente = this.client.cliente.nombre;
+          this.facturaData.total_factura = this.mesas[this.numeroMesa -1 ].total;
+          
+
+          if(this.client.cliente.nombre.length != 0){
+            this.clienteExiste = true;
+          }
+          else {
+            this.clienteExiste = false;
+          }
+          
+        }, (err) => {
+          console.log('Error', err.error.msg);
+          this.clienteExiste = false;
+        });
+        
+  }
+
+  limpiarPedido() {
+    this.pedidos = [];
+    this.mesas[this.numeroMesa -1 ].productos = this.pedidos;
+    this.mesas[this.numeroMesa -1 ].occuped = false;
+    this.mesas[this.numeroMesa -1 ].total = 0;
+    localStorage.setItem('mesas',  JSON.stringify(this.mesas));
+    this.habilitaBotones(this.pedidos = []);
+    this.factura = false;
+  }
+
+  habilitaBotones(pedidos: Producto[]) {
+
+    if(pedidos.length != 0) {
+      this.habilitaBoton = true;
+    }
+    else {
+      this.habilitaBoton = false;
+    }
+
+    // console.log(this.pedidos.length);
+    
   }
 
 }
