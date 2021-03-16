@@ -16,4 +16,6 @@ export class Producto {
     this.precio_venta=0;
     this.total=0;
   }
+
+
 }

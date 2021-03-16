@@ -39,7 +39,7 @@ export class ListardetalleComponent implements OnInit {
         // Buscar el producto enviando el id que corresponde a detalle factura
         this.api.BuscarProducto(this.codigo).subscribe(data=>{
           // Guardar en la variable el producto encontrado
-          this.productoEncontrado=data['producto'][0];
+          this.productoEncontrado=data['productos'][0];
           // Crear detalle factura con los datos de los detalles y de productos
           let nuevoProductoTemp=new Producto();
           nuevoProductoTemp._id=this.codigo;

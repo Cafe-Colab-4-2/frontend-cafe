@@ -6,8 +6,8 @@ import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-
 const base_url = environment.base_url;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -33,6 +33,25 @@ export class DetallefacturaService {
   ObtenerDetalle(): Observable<DetalleFactura[]> {
     let direccion=base_url+'/detalles-facturas';
     return this.http.get<DetalleFactura[]>(direccion, this.headers)
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+  // Crar detalle factura
+  crearDetalle(detalle): Observable<DetalleFactura> {
+    let direccion=base_url+'/detalles-facturas'
+    return this.http.post<DetalleFactura>(direccion,
+      JSON.stringify(detalle),
+      this.headers)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  ObtenerProductos(): Observable<Producto[]> {
+    let direccion=base_url+'/productos/';
+    return this.http.get<Producto[]>(direccion, this.headers)
     .pipe(
       retry(1),
       catchError(this.handleError)

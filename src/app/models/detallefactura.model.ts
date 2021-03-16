@@ -15,5 +15,9 @@ export class DetalleFactura {
     this.precio_unitario=0;
     this.total=0;
   }
+
+  calcularPrecioTotal(){
+    return this.productos.precio_venta*this.cantidad;
+  }
 }
 

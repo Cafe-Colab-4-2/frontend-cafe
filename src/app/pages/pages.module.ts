@@ -16,6 +16,7 @@ import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
+import { NuevodetalleComponent } from './mantenimientos/detallefactura/nuevodetalle/nuevodetalle.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { ListardetalleComponent } from './mantenimientos/detallefactura/listarde
     UsersComponent,
     ProfileComponent,
     ListardetalleComponent,
+    NuevodetalleComponent,
 
   ],
   exports: [
