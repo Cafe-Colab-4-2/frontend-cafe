@@ -21,7 +21,9 @@ export interface DetalleFactura {
 export interface FacturaForm {
     nombre_cliente: string,
     id_cliente: string,
-    total_factura?: number
+    total_factura?: number,
+    fecha ?: string,
+    _id ?: string
 }
 
 

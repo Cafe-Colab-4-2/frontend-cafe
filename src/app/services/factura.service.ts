@@ -49,7 +49,7 @@ export class FacturaService {
   // Crear Factura
   crearFactura( formData: FacturaForm ) {
     console.log('Creando Factura Service');
-    return this.http.post<FacturaForm>(`${ base_url }/facturas`, formData, this.userService.headers  );
+    return this.http.post(`${ base_url }/facturas`, formData, this.userService.headers  );
   }
   // Fin Crear Factura
   

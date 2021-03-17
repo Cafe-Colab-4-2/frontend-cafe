@@ -7,7 +7,13 @@
                 <div cdkDropList cdkDropListOrientation="horizontal" class="center-text-cards">
                     <div class="card-mesas bg-primary p-3 text-center text-white cursor card-align" *ngFor="let mesa of mesas" data-toggle="modal" data-target="#modalProductos" (click)="cargaModal(mesa.no)" cdkDrag>
                         
-                            <small *ngIf="mesa.occuped"><b>Ocupado</b></small>
+                            <small *ngIf="mesa.occuped">
+                                <b>Ocupado</b>
+                                <div class="notify" style="margin-top: 20px; margin-right: 65px;">
+                                    <span class="heartbit"></span>
+                                    <span class="point"></span>
+                                </div>
+                            </small>
                             <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
                             <h3 class="card-title text-white">Mesa</h3>
                             <h1 class="text-white"><b> {{ mesa.no }} </b></h1>
@@ -52,7 +58,7 @@
                     <div class="card" *ngIf="!factura">
                         <div class="card-body" >
                             <div *ngFor="let producto of productos; index as i" class=" p-3 card-align" >
-                                <div *ngIf="producto.categoria == 'CAFE' && modalOpcion">
+                                <div *ngIf="producto.categoria == 'Bebidas' && modalOpcion">
                                     <div class="bg-primary p-3 text-center text-white cursor card-align" (click)="agregarAPedido(producto)">                                
                                         <h2 class="text-white"><b> {{ producto.descripcion }} </b></h2>
                                         <footer>
@@ -147,9 +153,9 @@
                     <table class="table form-material">
                         <thead>
                             <tr>
-                                <th>Actions</th>
-                                <th>Quantity</th>
-                                <th>Product</th>
+                                <th></th>
+                                <th class="w50">Quantity</th>
+                                <th class="w250">Product</th>
                                 <th>Size</th>
                                 <th>Unit Price</th>
                                 <th>Sub Total</th>
@@ -157,7 +163,7 @@
                         </thead>
                         <tbody>
                             <tr class="table-success" *ngFor="let pedido of pedidos">
-                                <td>
+                                <td class="text-justified">
                                     <a data-toggle="tooltip" data-original-title="Remove" class="cursor" (click)="eliminarProductoDePedido(pedido)"> <i class="fa fa-close text-danger"></i> </a>
                                 </td>
 
@@ -176,28 +182,24 @@
                                 </td>
                                 
                             </tr>
-                            <tr class=" form-material">
-                                    <div *ngFor="let mesa of mesas" >
-                                        <h2 *ngIf="mesa.no  == numeroMesa" class="card-align form-material"> Total: Q. {{ mesa.total }} </h2>
-                                    </div>
-                            </tr>
                         </tbody>
                     </table>
-                    
+                    <div *ngFor="let mesa of mesas">
+                        <h2 *ngIf="mesa.no  == numeroMesa" class="total"><b> Total: Q. {{ mesa.total }} </b></h2>
+                    </div>
                 </div>
                 
                 <tr>
                     <td> 
-                        <a class="btn btn-outline-success active text-white" role="button" (click)="guardarTablas()" *ngIf="habilitaBoton">Save Table</a>
+                        <a class="btn btn-outline-primary col-xs-4 active text-white" role="button" (click)="actualizarDatosMesas()" *ngIf="habilitaBoton">Generate Bill</a>
                     </td>
+                    &nbsp;
                     <td> 
-                        <a class="btn btn-outline-primary active text-white" role="button" (click)="actualizarDatosMesas()" *ngIf="habilitaBoton">Generate Bill</a>
+                        <a class="btn btn-outline-danger col-xs-4 active text-white" role="button" (click)="limpiarPedido()" *ngIf="habilitaBoton">Clean Table</a>
                     </td>
+                    &nbsp;
                     <td> 
-                        <a class="btn btn-outline-danger active text-white" role="button" (click)="limpiarPedido()" *ngIf="habilitaBoton">Clean Table</a>
-                    </td>
-                    <td> 
-                        <a class="btn btn-outline-danger active text-white" role="button" data-dismiss="modal">Close</a>
+                        <a class="btn btn-outline-danger col-xs-4 active text-white" role="button" data-dismiss="modal">Close</a>
                     </td>
                 </tr>
                 </div>

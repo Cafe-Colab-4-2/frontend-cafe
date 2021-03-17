@@ -72,7 +72,7 @@ export class ClienteService {
 
   getCliente(nit: number) {
     const url = `${ base_url }/clientes/${ nit }`;
-    return this.http.get<Cliente>(url, this.userService.headers);
+    return this.http.get(url, this.userService.headers);
   }
 
   

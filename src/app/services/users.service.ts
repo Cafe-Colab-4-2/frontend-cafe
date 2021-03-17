@@ -70,7 +70,7 @@ export class UsersService {
         // nombre email role google activo img
         const { email, google, nombre, role, activo, img = '', uid, _id } = resp.usuario;
         this.usuario = new Usuario( nombre, email, '',  activo, img, google, role, _id );
-        console.log( resp.usuario);
+        // console.log( resp.usuario);
 
         return true;
       }),

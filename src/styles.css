@@ -17,12 +17,20 @@
     border-radius: 10%;
 }
 
+.w50 {
+  width: 50px;
+}
+
 .w100 {
     width: 100px;
 }
 
 .w140 {
     width: 140px;
+}
+
+.w250 {
+  width: 250px;
 }
 
 .avatar {
@@ -112,6 +120,15 @@
   .nav-productos {
     width: 90%;
     margin: auto;
+  }
+
+  .total {
+    margin-left: 5%;
+    text-align: center;
+  }
+
+  .text-justified {
+    text-align: center;
   }
 
 
