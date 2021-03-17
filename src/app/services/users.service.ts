@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { Usuario } from '../models/usuario.model';
 import { LoginForm } from '../interfaces/login-form';
 import { RegisterForm } from '../interfaces/register-form';
+import { CargarUsuarios } from '../interfaces/cargar-usuarios';
 
 const base_url = environment.base_url;
 
@@ -27,11 +28,7 @@ export class UsersService {
 
   constructor( private http: HttpClient, 
                 private router: Router,
-                private ngZone: NgZone ) {
-
-    // this.googleInit();
-    
-  }
+                private ngZone: NgZone ) { }
 
   get token(): string {
     return localStorage.getItem('token') || '';
@@ -49,32 +46,9 @@ export class UsersService {
     }
   }
 
-  /*
-  googleInit() {
-
-    return new Promise( resolve => {
-      gapi.load('auth2', () => {
-        this.auth2 = gapi.auth2.init({
-          client_id: '1045072534136-oqkjcjvo449uls0bttgvl3aejelh22f5.apps.googleusercontent.com',
-          cookiepolicy: 'single_host_origin',
-        });
-
-        resolve();
-      });
-    })
-
-  }
-  */
 
   logOut() {
     localStorage.removeItem('token');
-
-    // this.auth2.signOut().then(() => {
-
-    //   this.ngZone.run(() => {
-    //     this.router.navigateByUrl('/login');
-    //   })
-    // });
 
       this.ngZone.run(() => {
         this.router.navigateByUrl('/login');
@@ -96,7 +70,7 @@ export class UsersService {
         // nombre email role google activo img
         const { email, google, nombre, role, activo, img = '', uid, _id } = resp.usuario;
         this.usuario = new Usuario( nombre, email, '',  activo, img, google, role, _id );
-        console.log( resp.usuario);
+        // console.log( resp.usuario);
 
         return true;
       }),
@@ -123,7 +97,7 @@ export class UsersService {
   
 
   // Actualizar Perfil
-  actualizarPerfil( data: { email: string, nombre: string, role: string } ) {
+  actualizarPerfil( data: { email: string, nombre: string, role: string, password: string, password2: string } ) {
 
     data = {
       ...data,
@@ -146,78 +120,52 @@ export class UsersService {
   }
   // Fin LogIn
 
-  /*
-  loginGoogle( token ) {
-    
-    return this.http.post(`${ base_url }/login/google`, { token } )
-                .pipe(
-                  tap( (resp: any) => {
-                    localStorage.setItem('token', resp.token )
-                  })
-                );
-
-  }
-  */
 
   // CARGAR USUARIOS CON PAGINACIÓN
-  // cargarUsuarios( desde: number = 0 ) {
+cargarUsuarios( desde: number = 0 ) {
 
-  //   const url = `${ base_url }/usuarios?desde=${ desde }`;
-  //   return this.http.get( url, this.headers )
-  //           .pipe(
-  //             map( resp => {
-  //               const usuarios = resp.usuarios.map( 
-  //                 user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )  
-  //               );
-  //               return {
-  //                 total: resp.total,
-  //                 usuarios
-  //               };
-  //             })
-  //           )
-  // }
-
-
-
-// Cargar Usuarios
-// cargarUsuarios() {
-
-//     const url = `${ base_url }/usuarios`;
-//     return this.http.get<CargarUsuario>( url, this.headers )
-//             .pipe(
-//               map( resp => {
-//                 const usuarios = resp.usuarios.map( 
-//                   user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )  
-//                 );
-//                 return {
-//                   total: resp.total,
-//                   usuarios
-//                 };
-//               })
-//             )
-//   }
+  const url = `${ base_url }/usuarios?desde=${ desde }`;
+    return this.http.get<CargarUsuarios>( url, this.headers )
+            .pipe(
+              map( resp => {
+                const usuarios = resp.usuarios.map( 
+                  user => new Usuario(user.nombre, user.email, '', user.activo , user.img, user.google, user.role, user._id )  
+                );
+                return {
+                  total: resp.total,
+                  usuarios
+                };
+              })
+            )
+  }
   // Fin Cargar Usuarios
-  
 
 
-/*
   eliminarUsuario( usuario: Usuario ) {
     
       // /usuarios/5eff3c5054f5efec174e9c84
-      const url = `${ base_url }/usuarios/${ usuario.uid }`;
+      const url = `${ base_url }/usuarios/${ usuario._id }`;
       return this.http.delete( url, this.headers );
   }
 
+
+
   guardarUsuario( usuario: Usuario ) {
 
-    return this.http.put(`${ base_url }/usuarios/${ usuario.uid }`, usuario, this.headers );
+    return this.http.put(`${ base_url }/usuarios/${ usuario._id }`, usuario, this.headers );
 
   }
-  */
 
-  postUser( formData: LoginForm) {
-      console.log('creando usuario');
+   // Actualizar Perfil
+   actualizarUserPerfil( data: { email: string, nombre: string, role: string, password: string, password2: string }, userId: string, userRole: string ) {
+
+    data = {
+      ...data,
+      role: userRole
+    }
+    return this.http.put(`${ base_url }/usuarios/${ userId }`, data, this.headers );
   }
+
 
 }
 

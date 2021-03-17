@@ -17,7 +17,7 @@ export class BreadcrumbsComponent implements OnDestroy {
   constructor( private router: Router ) { 
     this.argumentosRuta = this.getArgumentosRuta()
     .subscribe( event => {
-      console.log(event, event.titulo);
+      // console.log(event, event.titulo);
       this.titulo = event.titulo;
       document.title =  `Café - ${event.titulo}`
       

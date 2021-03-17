@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { UsersService } from '../../../services/users.service';
+import { Usuario } from '../../../models/usuario.model';
+import { BusquedasService } from '../../../services/busquedas.service';
 
 @Component({
   selector: 'app-users',
@@ -11,33 +13,51 @@ import { UsersService } from '../../../services/users.service';
 })
 export class UsersComponent {
 
-  nuevoUsuario = true;
+  public nuevoUsuario = true;
+  public editarUsuario = false;
+  public usuarios: Usuario[] = [];
+  public usuariosTemp: Usuario[] = [];
+  public totalUsuarios: number;
+  public desde: number = 0;
+  public cargando = true;
+  public editingUserId: string;
+  public editingUserRole: string;
 
   public formSubmitted = false;
 
-  public registerForm = this.fb.group({
-    nombre: ['', Validators.required],
-    email: [ '', [Validators.required, Validators.email] ],
-    password: [ '', Validators.required ],
-    password2: [ '', Validators.required ],
-    terminos: [ true, Validators.required ]
-  }, {
-    validators: this.passwordsIguales('password', 'password2')
-  }  );
+  public registerForm: FormGroup;
+
 
   constructor( 
                 private fb: FormBuilder, 
-                private userService: UsersService ) { }
+                public userService: UsersService,
+                private busquedaSerivce: BusquedasService ) { 
+                  this.formulario();
+                  this.cargarUsuarios();
+                  this.cargando = true;
+                }
 
-  
-  // Logout
   logOut() {
     localStorage.removeItem('token');
   }
 
+  formulario() {
+
+    this.registerForm = this.fb.group({
+      nombre: ['', Validators.required],
+      email: [ '', [Validators.required, Validators.email] ],
+      password: [ '', Validators.required ],
+      password2: [ '', Validators.required ],
+      terminos: [ true, Validators.required ]
+    }, {
+      validators: this.passwordsIguales('password', 'password2')
+    }  );
+  }
+
   crearUsuario() {
+    this.editarUsuario = false;
     this.formSubmitted = true;
-    console.log(this.registerForm.value);
+
 
     if( this.registerForm.invalid ) {
       return;
@@ -56,7 +76,6 @@ export class UsersComponent {
       }, (err) => {
         Swal.fire('Error: ', err.error.msg, 'error');
         console.log(err.error);
-        
       }
       );
   }
@@ -100,6 +119,146 @@ export class UsersComponent {
         pass2Control.setErrors( {noEsIgual: true} );
       }
     }
+  }
+
+
+  cargarUsuarios( ){
+    this.userService.cargarUsuarios( this.desde  )
+      .subscribe( resp => {
+        console.log(resp);
+        this.usuarios = resp.usuarios;
+        this.usuariosTemp = resp.usuarios;
+        this.totalUsuarios = resp.total;
+        
+      this.cargando = false;
+      });
+  }
+
+  cambiarPagina( valor: number ) {
+    this.desde += valor;
+
+    if ( this.desde < 0 ) {
+      this.desde = 0;
+    } else if ( this.desde >= this.totalUsuarios ) {
+      this.desde -= valor; 
+    }
+
+    this.cargarUsuarios();
+  }
+
+  buscar( termino: string) {
+    if( termino.length === 0) {
+      return this.usuarios = [ ...this.usuariosTemp ];
+    }
+
+    this.busquedaSerivce.buscar( 'usuarios', termino)
+      .subscribe( (resp: Usuario[]) => {
+        this.usuarios = resp;
+      }
+      );
+    
+  }
+
+
+  eliminarUsuario( usuario: Usuario ) {
+  this.editarUsuario = false;
+  if ( usuario._id === this.userService.uid ){
+    return Swal.fire('Error: ', 'No esposible auto borrarse', 'error');
+  }
+
+
+    const swal = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+    
+    swal.fire({
+      title: 'Delete user: ' + usuario.nombre + 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+
+      if(result.value) {
+        
+        if (result.isConfirmed) {
+          
+          this.userService.eliminarUsuario( usuario )
+            .subscribe( resp => {              
+              swal.fire(
+              'Deleted!',
+              'User has been deleted.',
+              'success'
+              )
+
+              this.cargarUsuarios();
+            });
+          
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+        ) {
+          
+          swal.fire(
+            'Cancelled',
+            'User is safe :)',
+            'error'
+            )
+          }
+      }
+    })
+  }
+
+  modificarUsuario( user: Usuario ) {
+
+      console.log(this.registerForm.value, user);
+      
+    this.userService.guardarUsuario(user)
+      .subscribe(
+        resp => {
+          console.log(resp);
+          this.cargarUsuarios()
+        }
+      );
+  }
+
+  actualizarPerfil( ) {
+    console.log( this.registerForm.value );
+
+    if( this.registerForm.invalid ) {
+      return;
+    }
+
+    this.userService.actualizarUserPerfil( this.registerForm.value, this.editingUserId, this.editingUserRole )
+        .subscribe( resp => {
+          Swal.fire('Actualización Correcta', this.registerForm.get('nombre').value, 'success');
+          this.cargarUsuarios();
+        }, (err) => {
+          Swal.fire('Error', err.error.msg, 'error');
+        })
+    
+  }
+
+  cargarUsuario(usuario: Usuario) {
+    this.editingUserId = usuario._id;
+    this.editingUserRole = usuario.role;
+    
+    this.editarUsuario = true;
+    this.registerForm = this.fb.group({
+      nombre: [usuario.nombre, Validators.required],
+      email: [ usuario.email,  [Validators.required, Validators.email] ],
+      password: [ usuario.password, Validators.required ],
+      password2: [ usuario.password, Validators.required ],
+      terminos: [ true ]
+    }, {
+      validators: this.passwordsIguales('password', 'password2')
+    } );
   }
 
 }

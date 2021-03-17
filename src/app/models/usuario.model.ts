@@ -16,7 +16,12 @@ export class Usuario {
     ) {}
 
     get getImage() {
-        if ( this.img ) {
+
+        if ( !this.img ) {
+            return `${ base_url }/uploads/usuarios/no-image`;
+        } else if ( this.img.includes('https')) {
+            return this.img;
+        } else if ( this.img ) {
             return `${base_url}/uploads/usuarios/${this.img}`;
         } else {
             return `${base_url}/uploads/usuarios/no-image`;
