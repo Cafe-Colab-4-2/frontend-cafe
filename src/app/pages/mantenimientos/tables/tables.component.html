@@ -1,42 +1,220 @@
+
+<!-- Muestra las tarjetas de las Mesas -->
 <div class="row animated fadeIn fast">
     <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-
-                <div class="example-boundary">
-
-                    <div *ngFor="let mesa of mesas; index as i;"
-                        class="card bg-primary p-3 text-center text-white cursor" 
-                        style="width: 15%; border-radius: 10px; margin: 10px;"
-                        cdkDrag (cdkDragEnded)="getPosition($event, i)" 
-                        cdkDragBoundary=".example-boundary" 
-                        [cdkDragFreeDragPosition]="mesa.dragPosition"
-                        (click)="desplegarProductos()"
-                        >
+        <div class="card" >
+            <div class="card-body" >
+                <div cdkDropList cdkDropListOrientation="horizontal" class="center-text-cards">
+                    <div class="card-mesas bg-primary p-3 text-center text-white cursor card-align" *ngFor="let mesa of mesas" data-toggle="modal" data-target="#modalProductos" (click)="cargaModal(mesa.no)" cdkDrag>
                         
-                        <h2 class="card-title text-white">Mesa</h2>
-                        <h1 class="text-white"><b> {{ mesa.no }} </b></h1>
-                        <footer>
-                            <small>
-                                {{ mesa.sillas }} sillas
+                            <small *ngIf="mesa.occuped">
+                                <b>Ocupado</b>
+                                <div class="notify" style="margin-top: 20px; margin-right: 65px;">
+                                    <span class="heartbit"></span>
+                                    <span class="point"></span>
+                                </div>
                             </small>
-                        </footer>
-
-                        <div class="example-handle" cdkDragHandle>
-                            <i class="fa fa-arrows-alt"></i>
-                        </div>
+                            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                            <h3 class="card-title text-white">Mesa</h3>
+                            <h1 class="text-white"><b> {{ mesa.no }} </b></h1>
+                            <footer>
+                                <small>
+                                    {{ mesa.sillas }} sillas
+                                </small>
+                            </footer>
                     </div>
-                </div>
+                </div>          
             </div>
-
         </div>
     </div>
 </div>
 
-<div>
-    <label *ngFor='let producto of productos'>
-        Description: {{ producto.stock }} - Price: {{ producto.precio_venta }}
-    </label>
-</div>
 
+  
+  <!-- Modal -->
+  <div class="modal fade" id="modalProductos" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:80%;" role="document">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Productos</h5>
+          
+        </div>
+        <div class="modal-body">
+            <nav class="nav nav-pills nav-justified nav-fill nav-productos" *ngIf="!factura">
+                <a class="nav-item nav-link active cursor" *ngIf="modalOpcion" (click)="modalProductos(true)">Bebidas Calientes</a>
+                <a class="nav-item nav-link cursor" *ngIf="!modalOpcion" (click)="modalProductos(true)">Bebidas Calientes</a>
+                <a class="nav-item nav-link active cursor" *ngIf="!modalOpcion" (click)="modalProductos(false)">Bebidas Frias</a>
+                <a class="nav-item nav-link cursor" *ngIf="modalOpcion" (click)="modalProductos(false)">Bebidas Frias</a>
+            </nav>
 
+            <br>
+
+            <!-- BEBIDAS CALIENTES -->
+            <div class="jumbotron">
+                <div class="row">
+                  <div class="col-6">
+            
+                    <div class="card" *ngIf="!factura">
+                        <div class="card-body" >
+                            <div *ngFor="let producto of productos; index as i" class=" p-3 card-align" >
+                                <div *ngIf="producto.categoria == 'Bebidas' && modalOpcion">
+                                    <div class="bg-primary p-3 text-center text-white cursor card-align" (click)="agregarAPedido(producto)">                                
+                                        <h2 class="text-white"><b> {{ producto.descripcion }} </b></h2>
+                                        <footer>
+                                            <h3 class="text-white">
+                                                <b> Q. {{ producto.precio_venta }} </b>
+                                            </h3>
+                                            <small>
+                                                Stock: {{ producto.stock }} <br>
+                                                <b>{{ producto.presentacion }}</b>
+                                            </small>
+                                        </footer>                                
+                                    </div>                            
+                                </div>
+                                <div *ngIf="producto.categoria == 'Pasteles' && !modalOpcion">
+                                    <div class="bg-primary p-3 text-center text-white cursor card-align" (click)="agregarAPedido(producto)">
+                                    
+                                        <h2 class="text-white"><b> {{ producto.descripcion }} </b></h2>
+                                        <footer>
+                                            <h3 class="text-white">
+                                                <b> Q. {{ producto.precio_venta }} </b>
+                                            </h3>
+                                            <small>
+                                                Stock: {{ producto.stock }} <br>
+                                                <b>{{ producto.presentacion }}</b>
+                                            </small>
+                                        </footer>   
+                                    </div>                             
+                                </div>
+                            </div>    
+                        </div>
+                    </div>
+
+                        <!-- ============================================================== -->
+                        <!-- FORMULARIO / GENERAR FACTURA -->
+                        <!-- ============================================================== -->
+                    <div class="login-box card">
+                        <div class="card-body" *ngIf="factura && habilitaBoton">
+                                
+
+                            <form 
+                                    class="form-horizontal form-material" 
+                                    id="loginform" 
+                                    autocomplete="off"
+                                    [formGroup]="facturaForm"
+                                    (ngSubmit)="generarFactura()">
+                                    <h2 class="text-center"> <b> New Bill </b></h2>
+                                    <br><br>
+
+                                <div class="form-group m-t-20">
+                                    <div class="col-xs-12">
+                                        <input class="form-control"
+                                            type="number" 
+                                            required="" 
+                                            placeholder="NIT"
+                                            formControlName="nit"
+                                            (keyup)="getUser(txtInputTermino.value)"
+                                            #txtInputTermino>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="col-xs-12">
+                                        <input class="form-control border-primary" type="text" required="" placeholder="Name" formControlName="nombre">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-danger">
+                                        <p *ngIf="campoNoValido('nit')">* NIT is required </p>
+                                        <p *ngIf="campoNoValido('nombre')">* Name is required </p>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center m-t-20">
+                                    <div class="col-xs-12">
+                                            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light cursor" type="submit">
+                                                <i class="mdi mdi-account-edit"></i>
+                                                Save Bill
+                                            </button>
+                                            <br><br>
+                                            <a class="btn btn-outline-danger btn-lg active text-white" role="button" (click)="factura = !factura;">Cancelar</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- ============================================================== -->
+                            <!-- FORMULARIO / GENERAR FACTURA -->
+                            <!-- ============================================================== -->
+
+                        </div>
+                    </div>
+            </div>
+            
+            <div class="col-6">
+                <div class="card">
+                    <table class="table form-material">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th class="w50">Quantity</th>
+                                <th class="w250">Product</th>
+                                <th>Size</th>
+                                <th>Unit Price</th>
+                                <th>Sub Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-success" *ngFor="let pedido of pedidos">
+                                <td class="text-justified">
+                                    <a data-toggle="tooltip" data-original-title="Remove" class="cursor" (click)="eliminarProductoDePedido(pedido)"> <i class="fa fa-close text-danger"></i> </a>
+                                </td>
+
+                                <td class="justify-content">
+                                    <a data-toggle="tooltip" data-original-title="Decrease" class="cursor" (click)="setCantidadProducto('-1', pedido)"> <i class="fa fa-minus-square text-success"></i> </a>
+                                    {{ pedido.cantidad }}
+                                    <a data-toggle="tooltip" data-original-title="Increase" class="cursor" (click)="setCantidadProducto('+1', pedido)"> <i class="fa fa-plus-square text-success"></i> </a>
+                                </td>
+                                
+                                <td> {{ pedido.descripcion }}   </td>
+                                <td> {{ pedido.presentacion }} </td>
+                                <td> Q. {{ pedido.precio_venta }} <small>(c/u)</small></td>
+                            
+                                <td>
+                                    Q. {{ pedido.cantidad * pedido.precio_venta }}
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngFor="let mesa of mesas">
+                        <h2 *ngIf="mesa.no  == numeroMesa" class="total"><b> Total: Q. {{ mesa.total }} </b></h2>
+                    </div>
+                </div>
+                
+                <tr>
+                    <td> 
+                        <a class="btn btn-outline-primary col-xs-4 active text-white" role="button" (click)="actualizarDatosMesas()" *ngIf="habilitaBoton">Generate Bill</a>
+                    </td>
+                    &nbsp;
+                    <td> 
+                        <a class="btn btn-outline-danger col-xs-4 active text-white" role="button" (click)="limpiarPedido()" *ngIf="habilitaBoton">Clean Table</a>
+                    </td>
+                    &nbsp;
+                    <td> 
+                        <a class="btn btn-outline-danger col-xs-4 active text-white" role="button" data-dismiss="modal">Close</a>
+                    </td>
+                </tr>
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+            
+
+            
+
+                
+                

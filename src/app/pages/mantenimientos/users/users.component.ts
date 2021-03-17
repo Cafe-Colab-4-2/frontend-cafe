@@ -20,7 +20,8 @@ export class UsersComponent {
   public totalUsuarios: number;
   public desde: number = 0;
   public cargando = true;
-  public editinUserId: string;
+  public editingUserId: string;
+  public editingUserRole: string;
 
   public formSubmitted = false;
 
@@ -36,8 +37,6 @@ export class UsersComponent {
                   this.cargando = true;
                 }
 
-  
-  // Logout
   logOut() {
     localStorage.removeItem('token');
   }
@@ -153,8 +152,8 @@ export class UsersComponent {
     }
 
     this.busquedaSerivce.buscar( 'usuarios', termino)
-      .subscribe( resp => {
-        this.usuarios = resp
+      .subscribe( (resp: Usuario[]) => {
+        this.usuarios = resp;
       }
       );
     
@@ -236,7 +235,7 @@ export class UsersComponent {
       return;
     }
 
-    this.userService.actualizarUserPerfil( this.registerForm.value, this.editinUserId )
+    this.userService.actualizarUserPerfil( this.registerForm.value, this.editingUserId, this.editingUserRole )
         .subscribe( resp => {
           Swal.fire('Actualización Correcta', this.registerForm.get('nombre').value, 'success');
           this.cargarUsuarios();
@@ -247,8 +246,8 @@ export class UsersComponent {
   }
 
   cargarUsuario(usuario: Usuario) {
-    this.editinUserId = usuario._id;
-    console.log('Id Usuario:', this.editinUserId);
+    this.editingUserId = usuario._id;
+    this.editingUserRole = usuario.role;
     
     this.editarUsuario = true;
     this.registerForm = this.fb.group({
