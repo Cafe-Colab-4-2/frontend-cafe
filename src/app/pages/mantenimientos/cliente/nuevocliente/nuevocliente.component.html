@@ -1,1 +1,71 @@
-<p>nuevocliente works!</p>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Nuevo Cliente</h4>
+        <!-- <h6 class="card-subtitle"></h6> -->
+        <form [formGroup]="formCliente" class="form-horizontal form-material"
+              autocomplete="off">
+          <div class="form-group row justify-content-center">
+            <label for="nombres" class="col-sm-3">Nombres</label>
+              <div class="col-sm-7">
+                <input type="text" id="nombres" formControlName="nombres" class="form-control">
+              </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label for="apellidos" class="col-sm-3">Apellidos</label>
+              <div class="col-sm-7">
+                <input type="text" id="apellidos" formControlName="apellidos" class="form-control">
+              </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label for="direccion" class="col-sm-3">Dirección</label>
+              <div class="col-sm-7">
+                <input type="text" id="direccion" formControlName="direccion" class="form-control">
+              </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label for="telefono" class="col-sm-3">Telefono</label>
+              <div class="col-sm-7">
+                <input type="text" id="telefono" formControlName="telefono" class="form-control">
+              </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label for="email" class="col-sm-3">Email</label>
+              <div class="col-sm-7">
+                <input type="email" id="email" formControlName="email" class="form-control">
+              </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label for="direccion" class="col-sm-3">Nit</label>
+              <div class="col-sm-7">
+                <input type="text" id="nit" formControlName="nit" class="form-control">
+              </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="mdi mdi-close"></i>
+          Cerrar
+          </button>
+          <button class="btn btn-info" type="button" (click)="agregarDetalle()">
+            <i class="mdi mdi-account-plus"></i>
+            Guardar
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+

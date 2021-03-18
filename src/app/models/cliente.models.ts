@@ -1,4 +1,4 @@
-export class Producto {
+export class Cliente {
   apellido:string;
   email:string;
   telefono:number;
