@@ -1,7 +1,5 @@
-import { NuevoclienteComponent } from './mantenimientos/cliente/nuevocliente/nuevocliente.component';
-import { ClienteComponent } from './mantenimientos/cliente/cliente.component';
-import { NuevodetalleComponent } from './mantenimientos/detallefactura/nuevodetalle/nuevodetalle.component';
-import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
+import { EditarComponent } from './mantenimientos/cliente/editar/editar.component';
+import { NuevoComponent } from './mantenimientos/cliente/nuevo/nuevo.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from '../guards/auth.guard';
@@ -13,7 +11,7 @@ import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
 import { ProfileComponent } from './profile/profile.component';
-
+import { ListarComponent } from '../pages/mantenimientos/cliente/listar/listar.component';
 
 const routes: Routes = [
     {
@@ -27,11 +25,10 @@ const routes: Routes = [
           { path: 'promises',         component: PromisesComponent,         data: { titulo: 'Promises'} },
           { path: 'rxjs',             component: RxjsComponent,             data: { titulo: 'Rxjs'} },
           { path: 'users',            component: UsersComponent,            data: { titulo: 'Users of App'} },
-          { path: 'profile',          component: ProfileComponent,           data: { titulo: 'My Profile'} },
-          { path: "detallefactura",    component: ListardetalleComponent,    data: { titulo: 'Detalle Factura'}},
-          { path: "detallefactura/nuevo", component: NuevodetalleComponent,  data: { titulo: 'Nuevo Detalle Factura'}},
-          { path: "cliente",          component:ClienteComponent,            data: { titulo: 'Cliente'}},
-          { path: "cliente/nuevo",    component:NuevoclienteComponent,       data: { titulo:  'Nuevo Cliente'}}
+          { path: 'profile',          component: ProfileComponent,          data: { titulo: 'My Profile'} },
+          { path: 'cliente',          component: ListarComponent,           data: { titulo: 'Cliente'}},
+          { path: 'cliente/nuevo',    component: NuevoComponent,            data: { titulo: 'Nuevo Cliente'}},
+          { path: 'cliente/:_id/editar',   component: EditarComponent,data: { titulo: 'Editar Cliente'}}
         ]
       },
 

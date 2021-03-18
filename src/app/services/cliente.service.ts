@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -27,22 +27,42 @@ export class ClienteService {
     }
   }
 
-  crearCliente(cliente): Observable<any> {
-    return this.http.post(`${ base_url }/detalles-facturas`,
+  crearCliente(cliente){
+    return this.http.post(`${ base_url }/clientes`,cliente,
       this.headers)
     .pipe(
-      catchError(this.handleError)
+      tap( (resp: any) => {
+        localStorage.setItem('token', resp.token )
+      })
     )
   }
 
-  handleError(error) {
-    let errorMessage = '';
-    if(error.error instanceof ErrorEvent) {
-      errorMessage = error.error.message;
-    } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    window.alert(errorMessage);
-    return throwError(errorMessage);
- }
+  BuscarCliente(id):Observable<Cliente>{
+    return this.http.get<Cliente>(`${ base_url }/clientes/`+id,
+      this.headers)
+    .pipe(
+      tap( (resp: any) => {
+        localStorage.setItem('token', resp.token )
+      })
+    )
+  }
+  MostrarClientes():Observable<Cliente[]>{
+    return this.http.get<Cliente[]>(`${ base_url }/clientes`,
+      this.headers)
+    .pipe(
+      tap( (resp: any) => {
+        localStorage.setItem('token', resp.token )
+      })
+    )
+  }
+
+  EliminarCliente(id){
+    return this.http.delete<Cliente>(`${ base_url}/clientes/`+id,
+    this.headers)
+    .pipe(
+      tap( (resp: any) => {
+        localStorage.setItem('token', resp.token )
+      })
+    )
+  }
 }

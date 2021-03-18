@@ -21,7 +21,6 @@ export class SidebarService {
       icon: 'mdi mdi-gauge',
       submenu: [
         { titulo: 'Users', url: 'users' },
-        { titulo: 'Detalle Factura', url:'detallefactura'},
         { titulo: 'Cliente', url:'cliente'}
       ]
     }

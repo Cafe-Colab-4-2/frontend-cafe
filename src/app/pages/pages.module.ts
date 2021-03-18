@@ -15,10 +15,9 @@ import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
-import { NuevodetalleComponent } from './mantenimientos/detallefactura/nuevodetalle/nuevodetalle.component';
-import { ClienteComponent } from './mantenimientos/cliente/cliente.component';
-import { NuevoclienteComponent } from './mantenimientos/cliente/nuevocliente/nuevocliente.component';
+import { ListarComponent } from './mantenimientos/cliente/listar/listar.component';
+import { NuevoComponent } from './mantenimientos/cliente/nuevo/nuevo.component';
+import { EditarComponent } from './mantenimientos/cliente/editar/editar.component';
 
 
 @NgModule({
@@ -31,11 +30,9 @@ import { NuevoclienteComponent } from './mantenimientos/cliente/nuevocliente/nue
     RxjsComponent,
     UsersComponent,
     ProfileComponent,
-    ListardetalleComponent,
-    NuevodetalleComponent,
-    ClienteComponent,
-    NuevoclienteComponent,
-
+    ListarComponent,
+    NuevoComponent,
+    EditarComponent
   ],
   exports: [
     PagesComponent,
