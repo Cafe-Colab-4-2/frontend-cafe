@@ -1,0 +1,48 @@
+<!-- Inicio - Buscar detalle factura -->
+<div class="row animated fadeIn fast">
+  <div class="col-12">
+      <div class="card">
+          <div class="card-body">
+
+              <input  type="text"
+                      class= "form-control"
+                      placeholder="Buscar Detalle ..." />
+          </div>
+      </div>
+  </div>
+</div>
+<!-- fin- Buscar detalle factura -->
+
+<!-- INICIO- MOSTRAR LOS DETALLES FACTURA-->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Detalle Factura</h4>
+
+        <!-- <h6 class="card-subtitle"></h6> -->
+        <div class="table-responsive">
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Cantidad</th>
+                      <th>Producto</th>
+                      <th>Precio Unitario</th>
+                      <th>Precio Total</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let item of nuevoDetalleFactura">
+                      <td>{{item.cantidad}}</td>
+                      <td>{{item.productos.descripcion}}</td>
+                      <td>{{item.precio_unitario}}</td>
+                      <td>{{item.total}}</td>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

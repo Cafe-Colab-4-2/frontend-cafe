@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import { DetallefacturaComponent } from './dashboard/detallefactura/detallefactura.component';
+>>>>>>> detallefactura
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from '../guards/auth.guard';
@@ -25,7 +29,11 @@ const routes: Routes = [
           { path: 'rxjs',             component: RxjsComponent,              data: { titulo: 'Rxjs'} },
           { path: 'users',            component: UsersComponent,             data: { titulo: 'Users of App'} },
           { path: 'profile',          component: ProfileComponent,           data: { titulo: 'My Profile'} },
+<<<<<<< HEAD
           { path: 'factura',          component:FacturaComponent,            data: { titulo: 'Factura'} }
+=======
+          { path: "detallefactura",    component: DetallefacturaComponent,    data: { titulo: 'Detalle Factura'}}
+>>>>>>> detallefactura
         ]
       },
 

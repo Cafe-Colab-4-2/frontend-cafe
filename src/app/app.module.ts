@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 
 import { NopagefoundComponent } from './nopagefound/nopagefound.component';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 
@@ -23,7 +24,9 @@ import { NopagefoundComponent } from './nopagefound/nopagefound.component';
     SharedModule,
     AuthModule
   ],
-  providers: [],
+  providers: [
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

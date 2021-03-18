@@ -1,3 +1,5 @@
+import { DetallefacturaComponent } from './dashboard/detallefactura/detallefactura.component';
+import { DetalleFactura } from './../models/detallefactura.model';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -28,7 +30,8 @@ import { FacturaComponent } from './dashboard/factura/factura.component';
     RxjsComponent,
     UsersComponent,
     ProfileComponent,
-    FacturaComponent
+    FacturaComponent,
+    DetallefacturaComponent
   ],
   exports: [
     PagesComponent,
