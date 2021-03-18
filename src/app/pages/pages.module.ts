@@ -17,8 +17,7 @@ import { UsersComponent } from './mantenimientos/users/users.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
 import { NuevodetalleComponent } from './mantenimientos/detallefactura/nuevodetalle/nuevodetalle.component';
-import { ClienteComponent } from './mantenimientos/cliente/cliente.component';
-import { NuevoclienteComponent } from './mantenimientos/cliente/nuevocliente/nuevocliente.component';
+import { FacturaComponent } from './dashboard/factura/factura.component';
 
 
 @NgModule({
@@ -33,9 +32,7 @@ import { NuevoclienteComponent } from './mantenimientos/cliente/nuevocliente/nue
     ProfileComponent,
     ListardetalleComponent,
     NuevodetalleComponent,
-    ClienteComponent,
-    NuevoclienteComponent,
-
+    FacturaComponent
   ],
   exports: [
     PagesComponent,

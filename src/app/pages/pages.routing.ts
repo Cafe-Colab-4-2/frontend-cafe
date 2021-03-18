@@ -1,5 +1,3 @@
-import { NuevoclienteComponent } from './mantenimientos/cliente/nuevocliente/nuevocliente.component';
-import { ClienteComponent } from './mantenimientos/cliente/cliente.component';
 import { NuevodetalleComponent } from './mantenimientos/detallefactura/nuevodetalle/nuevodetalle.component';
 import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
 import { Routes, RouterModule } from '@angular/router';
@@ -21,17 +19,16 @@ const routes: Routes = [
         component: PagesComponent,
         canActivate: [ AuthGuard ],
         children: [
-          { path: '',                 component: DashboardComponent,        data: { titulo: 'Dashboard'} },
-          { path: 'progress',         component: ProgressComponent,         data: { titulo: 'Progress'} },
-          { path: 'account-settings', component: AccountSettingsComponent,  data: { titulo: 'Account Settings'} },
-          { path: 'promises',         component: PromisesComponent,         data: { titulo: 'Promises'} },
-          { path: 'rxjs',             component: RxjsComponent,             data: { titulo: 'Rxjs'} },
-          { path: 'users',            component: UsersComponent,            data: { titulo: 'Users of App'} },
+          { path: '',                 component: DashboardComponent,         data: { titulo: 'Dashboard'} },
+          { path: 'progress',         component: ProgressComponent,          data: { titulo: 'Progress'} },
+          { path: 'account-settings', component: AccountSettingsComponent,   data: { titulo: 'Account Settings'} },
+          { path: 'promises',         component: PromisesComponent,          data: { titulo: 'Promises'} },
+          { path: 'rxjs',             component: RxjsComponent,              data: { titulo: 'Rxjs'} },
+          { path: 'users',            component: UsersComponent,             data: { titulo: 'Users of App'} },
           { path: 'profile',          component: ProfileComponent,           data: { titulo: 'My Profile'} },
           { path: "detallefactura",    component: ListardetalleComponent,    data: { titulo: 'Detalle Factura'}},
           { path: "detallefactura/nuevo", component: NuevodetalleComponent,  data: { titulo: 'Nuevo Detalle Factura'}},
-          { path: "cliente",          component:ClienteComponent,            data: { titulo: 'Cliente'}},
-          { path: "cliente/nuevo",    component:NuevoclienteComponent,       data: { titulo:  'Nuevo Cliente'}}
+          // { path: 'factura',          component:FacturaComponent,            data: { titulo: 'Factura'} }
         ]
       },
 
