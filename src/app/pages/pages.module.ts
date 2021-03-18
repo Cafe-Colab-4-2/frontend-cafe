@@ -15,8 +15,6 @@ import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
-import { NuevodetalleComponent } from './mantenimientos/detallefactura/nuevodetalle/nuevodetalle.component';
 import { FacturaComponent } from './dashboard/factura/factura.component';
 
 
@@ -30,8 +28,6 @@ import { FacturaComponent } from './dashboard/factura/factura.component';
     RxjsComponent,
     UsersComponent,
     ProfileComponent,
-    ListardetalleComponent,
-    NuevodetalleComponent,
     FacturaComponent
   ],
   exports: [

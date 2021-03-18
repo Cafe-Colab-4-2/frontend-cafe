@@ -1,1 +1,46 @@
-<p>factura works!</p>
+<!-- Inicio - Buscar detalle factura -->
+<div class="row animated fadeIn fast">
+  <div class="col-12">
+      <div class="card">
+          <div class="card-body">
+
+              <input  type="text"
+                      class= "form-control"
+                      placeholder="Buscar Factura ..." />
+          </div>
+      </div>
+  </div>
+</div>
+<!-- fin- Buscar detalle factura -->
+
+<!-- INICIO- MOSTRAR LOS DETALLES FACTURA-->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Lista de Facturas</h4>
+        <!-- <h6 class="card-subtitle"></h6> -->
+        <div class="table-responsive">
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>No. Factura</th>
+                      <th>Fecha</th>
+                      <th>Total</th>
+                      <!-- <th class="text-nowrap">Acciones</th> -->
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let item of facturas">
+                      <td>{{item._id}}</td>
+                      <td>{{item.fecha | date:"short"}}</td>
+                      <td>{{item.total_factura}}</td>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
