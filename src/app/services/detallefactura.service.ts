@@ -31,8 +31,8 @@ export class DetallefacturaService {
 
   // Mostrar los detalles de factura
   ObtenerDetalle(): Observable<DetalleFactura[]> {
-    let direccion=base_url+'/detalles-facturas';
-    return this.http.get<DetalleFactura[]>(direccion, this.headers)
+    return this.http.get<DetalleFactura[]>(`${ base_url }/detalles-facturas`,
+     this.headers)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -40,8 +40,7 @@ export class DetallefacturaService {
   }
   // Crar detalle factura
   crearDetalle(detalle): Observable<DetalleFactura> {
-    let direccion=base_url+'/detalles-facturas'
-    return this.http.post<DetalleFactura>(direccion,
+    return this.http.post<DetalleFactura>(`${ base_url }/detalles-facturas`,
       JSON.stringify(detalle),
       this.headers)
     .pipe(
@@ -50,8 +49,7 @@ export class DetallefacturaService {
   }
 
   ObtenerProductos(): Observable<Producto[]> {
-    let direccion=base_url+'/productos/';
-    return this.http.get<Producto[]>(direccion, this.headers)
+    return this.http.get<Producto[]>(`${ base_url }/productos`, this.headers)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -59,8 +57,7 @@ export class DetallefacturaService {
   }
 
   BuscarProducto(id){
-    let direccion=base_url+'/productos/';
-    return this.http.get<Producto>(direccion+id,
+    return this.http.get<Producto>(`${ base_url }/productos/`+id,
       this.headers)
       .pipe(
         catchError(this.handleError)

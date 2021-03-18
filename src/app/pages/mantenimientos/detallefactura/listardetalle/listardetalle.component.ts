@@ -11,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListardetalleComponent implements OnInit {
   // variable que almacena el codigo temporalmente para hacer pruebas
-  codigo="6043a24fc9b14a00159fd972";
+  // codigo="6043a24fc9b14a00159fd972";
   // variable que almacena los detalles de factura para guardar los datos
   // que devuelve la api
   detallesFacturas:DetalleFactura[]=[];
@@ -37,12 +37,13 @@ export class ListardetalleComponent implements OnInit {
       // Recorrer el array de this.detallesFacturas
       this.detallesFacturas.forEach(element=>{
         // Buscar el producto enviando el id que corresponde a detalle factura
-        this.api.BuscarProducto(this.codigo).subscribe(data=>{
+        this.api.BuscarProducto(element.id_producto).subscribe(data=>{
           // Guardar en la variable el producto encontrado
           this.productoEncontrado=data['productos'][0];
+          console.log(this.productoEncontrado)
           // Crear detalle factura con los datos de los detalles y de productos
           let nuevoProductoTemp=new Producto();
-          nuevoProductoTemp._id=this.codigo;
+          nuevoProductoTemp._id=this.productoEncontrado._id;
           nuevoProductoTemp.categoria=this.productoEncontrado.categoria;
           nuevoProductoTemp.precio_venta=this.productoEncontrado.precio_venta;
           nuevoProductoTemp.presentacion=this.productoEncontrado.presentacion;

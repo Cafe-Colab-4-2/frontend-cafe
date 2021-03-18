@@ -9,11 +9,11 @@ export class DetalleFactura {
   productos:Producto;
 
   constructor(){
-    this.id_factura="0";
-    this.id_producto="0";
-    this.cantidad=0;
-    this.precio_unitario=0;
-    this.total=0;
+    // this.id_factura="0";
+    // this.id_producto="0";
+    // this.cantidad=0;
+    // this.precio_unitario=0;
+    // this.total=0;
   }
 
   calcularPrecioTotal(){

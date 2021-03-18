@@ -1,4 +1,3 @@
-<!-- Inicio - Buscar detalle factura -->
 <div class="row animated fadeIn fast">
   <div class="col-12">
       <div class="card">
@@ -6,7 +5,7 @@
 
               <input  type="text"
                       class= "form-control"
-                      placeholder="Buscar Detalle ..." />
+                      placeholder="Buscar Cliente ..." />
           </div>
       </div>
   </div>
@@ -18,32 +17,31 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Detalle Factura</h4>
-        <app-nuevodetalle></app-nuevodetalle>
+        <h4 class="card-title">Lista de Clientes</h4>
         <!-- <h6 class="card-subtitle"></h6> -->
+        <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#ventanadetalle">
+          <i class="mdi mdi-plus"></i>
+          Agregar Cliente
+        </button>
         <div class="table-responsive">
           <table class="table table-bordered">
               <thead>
                   <tr>
-                      <th>Cantidad</th>
-                      <th>Producto</th>
-                      <th>Precio Unitario</th>
-                      <th>Precio Total</th>
-                      <!-- <th class="text-nowrap">Acciones</th> -->
+                      <th>Nit   </th>
+                      <th>Nombre Completo</th>
+                      <th>Dirección</th>
+                      <th>Teléfono</th>
+                      <th>Email</th>
+                      <th class="text-nowrap">Acciones</th>
                   </tr>
               </thead>
               <tbody>
-                  <tr *ngFor="let item of nuevoDetalleFactura">
-                      <td>{{item.cantidad}}</td>
-                      <td>{{item.productos.descripcion}}</td>
-                      <td>{{item.precio_unitario | currency:0:"Q"}}</td>
-                      <td>{{item.total | currency:0:"Q"}}</td>
                       <!-- <td class="text-nowrap">
                           <a href="#" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
                            <a href="#" (click)="EliminarDetalleF(item._id)" data-toggle="tooltip" data-original-title="Close"> <i class="fa fa-close text-danger"></i> </a> -->
                            <!-- <button type="button" (click)="EliminarDetalleF(item._id)" class="btn btn-danger">Eliminar</button> -->
                       <!-- </td> -->
-                  </tr>
+
               </tbody>
           </table>
         </div>

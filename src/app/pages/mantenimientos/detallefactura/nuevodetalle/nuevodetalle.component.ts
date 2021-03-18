@@ -27,7 +27,7 @@ export class NuevodetalleComponent implements OnInit {
   //Validar los datos del formulario
   ValidarFormulario(){
     this.formDetalle=this.formBuilder.group({
-      id_factura:['',Validators.required],
+      id_factura:['0',Validators.required],
       cantidad:['', Validators.required],
       id_producto:['',Validators.required],
       precio_unitario:[''],
@@ -61,8 +61,8 @@ export class NuevodetalleComponent implements OnInit {
     //obtener todos los productos
       const detalle=this.formDetalle.value;
       console.log(detalle);
-      this.api.crearDetalle(detalle).subscribe(res => {
-        console.log('Detalle Creado');
+      this.api.crearDetalle(detalle).subscribe((res:{}) => {
+        console.log(res);
         // this.router.navigateByUrl('post/index');
       })
    }
