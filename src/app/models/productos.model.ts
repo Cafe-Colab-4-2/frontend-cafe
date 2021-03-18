@@ -15,7 +15,8 @@ export class Producto {
         public img?: string,
         public _id?: string,
         public mesa?: number,
-        public cantidad?: number
+        public cantidad?: number,
+        public noPedido ?: number
     ) {}
 
     get getImage() {

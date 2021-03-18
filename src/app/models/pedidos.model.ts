@@ -9,3 +9,10 @@ export interface CostosTotalesMesas {
     total: number;
     mesa: number;
 }
+
+export interface PedidoLlevar {
+    pedidoNo: number;
+    productos: Producto[];
+    nombreCliente: string;
+    total: number;
+}

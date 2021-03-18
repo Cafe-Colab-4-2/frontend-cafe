@@ -5,7 +5,7 @@
         <div class="card" >
             <div class="card-body" >
                 <div cdkDropList cdkDropListOrientation="horizontal" class="center-text-cards">
-                    <div class="card-mesas bg-primary p-3 text-center text-white cursor card-align" *ngFor="let mesa of mesas" data-toggle="modal" data-target="#modalProductos" (click)="cargaModal(mesa.no)" cdkDrag>
+                    <div class="card-mesas p-3 text-center text-white cursor card-align tables-background-color" *ngFor="let mesa of mesas" data-toggle="modal" data-target="#modalProductos" (click)="cargaModal(mesa.no)" cdkDrag>
                         
                             <small *ngIf="mesa.occuped">
                                 <b>Ocupado</b>
@@ -30,23 +30,47 @@
 </div>
 
 
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card text-justified">
+            <div class="card-body" >
+                <div cdkDropList cdkDropListOrientation="horizontal" class="center-text-cards">
+                    <div class="card-llevar bg-success p-3 text-center text-white cursor card-align" data-toggle="modal" data-target="#modalLlevar" >
+
+                            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                            <h3 class="card-title text-white">PEDIDOS</h3>
+                            <h1 class="text-white"><b> PARA LLEVAR </b></h1>
+                            <footer>
+                                <small>
+                                    5 pedidos
+                                </small>
+                            </footer>
+                    </div>
+                </div>          
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<app-pedidos-llevar class="modal fade" id="modalLlevar" tabindex="-1" role="dialog" aria-hidden="true"></app-pedidos-llevar>
+
   
   <!-- Modal -->
   <div class="modal fade" id="modalProductos" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" style="max-width:80%;" role="document">
       <div class="modal-content">
         
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Productos</h5>
-          
+        <div class="modal-header text-justified">
+          <h2 class="modal-title text-justified" id="exampleModalLongTitle"><b> Mesa {{ numeroMesa }} </b></h2>
         </div>
         <div class="modal-body">
-            <nav class="nav nav-pills nav-justified nav-fill nav-productos" *ngIf="!factura">
+            <!-- <nav class="nav nav-pills nav-justified nav-fill nav-productos" *ngIf="!factura">
                 <a class="nav-item nav-link active cursor" *ngIf="modalOpcion" (click)="modalProductos(true)">Bebidas Calientes</a>
                 <a class="nav-item nav-link cursor" *ngIf="!modalOpcion" (click)="modalProductos(true)">Bebidas Calientes</a>
                 <a class="nav-item nav-link active cursor" *ngIf="!modalOpcion" (click)="modalProductos(false)">Bebidas Frias</a>
                 <a class="nav-item nav-link cursor" *ngIf="modalOpcion" (click)="modalProductos(false)">Bebidas Frias</a>
-            </nav>
+            </nav> -->
 
             <br>
 
@@ -56,10 +80,11 @@
                   <div class="col-6">
             
                     <div class="card" *ngIf="!factura">
-                        <div class="card-body" >
+                        <div class="card-body text-justified" >
                             <div *ngFor="let producto of productos; index as i" class=" p-3 card-align" >
-                                <div *ngIf="producto.categoria == 'Bebidas' && modalOpcion">
-                                    <div class="bg-primary p-3 text-center text-white cursor card-align" (click)="agregarAPedido(producto)">                                
+                                <!-- <div *ngIf="producto.categoria == 'Bebidas' && modalOpcion"> -->
+                                    <div *ngIf="modalOpcion">
+                                    <div class="bg-info p-3 text-center text-white cursor card-align" (click)="agregarAPedido(producto)">                                
                                         <h2 class="text-white"><b> {{ producto.descripcion }} </b></h2>
                                         <footer>
                                             <h3 class="text-white">
@@ -191,7 +216,7 @@
                 
                 <tr>
                     <td> 
-                        <a class="btn btn-outline-primary col-xs-4 active text-white" role="button" (click)="actualizarDatosMesas()" *ngIf="habilitaBoton">Generate Bill</a>
+                        <a class="btn btn-outline-success col-xs-4 active text-white" role="button" (click)="actualizarDatosMesas()" *ngIf="habilitaBoton">Generate Bill</a>
                     </td>
                     &nbsp;
                     <td> 

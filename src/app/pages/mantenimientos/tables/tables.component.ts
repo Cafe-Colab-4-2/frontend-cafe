@@ -19,8 +19,6 @@ import { DetalleFacturaService } from '../../../services/detalle-factura.service
 })
 export class TablesComponent implements OnInit {
 
-  $txtInputTermino : string;
-
   public factura = false;
   public formSubmitted = false;
   public rows = new Array(10); 
@@ -128,7 +126,7 @@ export class TablesComponent implements OnInit {
     this.pedidos = [];
   }
 
-  cargaModal(noMesa: number) {
+  cargaModal(noMesa: number, pedido: boolean) {
     this.factura = false;
     this.modalProductos(true);
     this.numeroMesa = noMesa;
