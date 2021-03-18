@@ -1,0 +1,58 @@
+<!-- <div class="row animated fadeIn fast">
+  <div class="col-12">
+      <div class="card">
+          <div class="card-body">
+
+              <input  type="text"
+                      class= "form-control"
+                      placeholder="Buscar Cliente ..." />
+          </div>
+      </div>
+  </div>
+</div> -->
+<!-- fin- Buscar detalle factura -->
+
+<!-- INICIO- MOSTRAR LOS DETALLES FACTURA-->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Lista de Clientes</h4>
+        <!-- <h6 class="card-subtitle"></h6> -->
+        <button type="button" class="btn btn-success mb-2"
+        routerLink="nuevo">
+          <i class="mdi mdi-plus"></i>
+          Agregar Cliente
+        </button>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Nit   </th>
+                      <th>Nombre Completo</th>
+                      <th>Dirección</th>
+                      <th>Teléfono</th>
+                      <th>Email</th>
+                      <th class="text-nowrap">Acciones</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of clientes">
+                  <td>{{ item.nit}}</td>
+                  <td>{{item.nombre}}{{item.apellido}}</td>
+                  <td>{{ item.direccion}}</td>
+                  <td>{{ item.telefono}}</td>
+                  <td>{{ item.email}}</td>
+                  <td>
+                    <button type="button" [routerLink]="['/cliente/',item._id,'editar']" class="btn btn-warning">Editar</button>
+                    <button type="button" class="btn btn-danger" (click)="EliminarC(item._id)">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

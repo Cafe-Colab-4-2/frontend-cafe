@@ -37,7 +37,7 @@ export class ClienteService {
     )
   }
 
-  
+
 
   mostrarClientes(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(`${ base_url }/clientes`,

@@ -23,6 +23,10 @@ export class SidebarService {
       icon: 'mdi mdi-gauge',
       submenu: [
         { titulo: 'Users', url: 'users' },
+<<<<<<< HEAD
+=======
+        { titulo: 'Cliente', url:'cliente'}
+>>>>>>> cliente
       ]
     }
   ]
