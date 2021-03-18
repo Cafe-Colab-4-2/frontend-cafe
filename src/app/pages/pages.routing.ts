@@ -1,5 +1,3 @@
-import { NuevodetalleComponent } from './mantenimientos/detallefactura/nuevodetalle/nuevodetalle.component';
-import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from '../guards/auth.guard';
