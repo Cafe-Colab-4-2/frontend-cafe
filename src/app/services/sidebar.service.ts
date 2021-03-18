@@ -13,7 +13,8 @@ export class SidebarService {
         { titulo: 'Dashboard', url: '/' },
         { titulo: 'ProgressBar', url: 'progress' },
         { titulo: 'Promises', url: 'promises' },
-        { titulo: 'Rxjs', url: 'rxjs'}
+        { titulo: 'Rxjs', url: 'rxjs'},
+        { titulo: 'Detalle Factura', url:'detallefactura'}
       ]
     },
     {
@@ -21,7 +22,6 @@ export class SidebarService {
       icon: 'mdi mdi-gauge',
       submenu: [
         { titulo: 'Users', url: 'users' },
-        { titulo: 'Detalle Factura', url:'detallefactura'}
       ]
     }
   ]

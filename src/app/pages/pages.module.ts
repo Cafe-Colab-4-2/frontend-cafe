@@ -15,8 +15,8 @@ import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ListardetalleComponent } from './mantenimientos/detallefactura/listardetalle/listardetalle.component';
-import { NuevodetalleComponent } from './mantenimientos/detallefactura/nuevodetalle/nuevodetalle.component';
+import { DetallefacturaComponent } from './dashboard/detallefactura/detallefactura.component';
+
 
 
 @NgModule({
@@ -29,8 +29,8 @@ import { NuevodetalleComponent } from './mantenimientos/detallefactura/nuevodeta
     RxjsComponent,
     UsersComponent,
     ProfileComponent,
-    ListardetalleComponent,
-    NuevodetalleComponent,
+    DetallefacturaComponent,
+    
 
   ],
   exports: [
