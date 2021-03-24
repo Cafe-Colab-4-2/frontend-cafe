@@ -6,6 +6,11 @@ import { ProductService } from '../../../services/product.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ClienteService } from 'src/app/services/client.service';
 import { Cliente } from '../../../models/cliente.model';
+import Swal from 'sweetalert2';
+import { FacturaService } from '../../../services/factura.service';
+import { FacturaForm, DetalleFactura } from '../../../interfaces/factura.forms';
+import { UsersService } from '../../../services/users.service';
+import { DetalleFacturaService } from '../../../services/detalle-factura.service';
 
 @Component({
   selector: 'app-pedidos-llevar',
@@ -20,6 +25,7 @@ export class PedidosLlevarComponent implements OnInit {
   // { 'pedidoNo': 2, 'productos': [], 'nombreCliente': 'Juan', 'total': 0 }, 
 
   public pedidosLlevarClean: PedidoLlevar = {'pedidoNo': 1, 'productos': [], 'nombreCliente': 'Andres', 'total': 0};
+  public detalleFacturaTemp: DetalleFactura = {id_factura: '', id_producto : '', cantidad : 0, precio_unitario : 0, total: 0, usuario: '' }
 
   public pedidos: PedidoLlevar[] = [];
   public pedidosTesting: PedidoLlevar[] = [];
@@ -29,6 +35,7 @@ export class PedidosLlevarComponent implements OnInit {
   public facturaForm: FormGroup;
   public productosPedidosTemp: Producto[] = [];
   public nombreCliente = '';
+  public facturaData: FacturaForm = { nombre_cliente: '', id_cliente: ''};
 
   public noPedido = 0;
   public indexPedidoActual = 0;
@@ -41,19 +48,21 @@ export class PedidosLlevarComponent implements OnInit {
   public habilitaBoton = false;
   public mostrarPedido = false;
   public clienteExiste = false;
+  public formSubmitted = false;
 
   public clientTemp: Cliente;
 
   constructor( 
     private productService: ProductService, 
-    private clientService: ClienteService, 
+    private clientService: ClienteService,
+    private facturaService: FacturaService,
+    private userService: UsersService,
+    private detalleFacturaService: DetalleFacturaService,
     private fb: FormBuilder, ) { }
 
   ngOnInit(): void {
     this.cargarProductos(); // Carga los productos desde la BD
     this.pedidosTesting = [];
-    console.log(this.pedidos, 'type: ', typeof(this.pedidos));
-    
     this.cargaPedidos();
     this.formulario();
 
@@ -220,14 +229,11 @@ export class PedidosLlevarComponent implements OnInit {
 
   actualizarDatosMesas() {
     this.factura = true;
+    this.habilitaBoton = true;
     this.guardarPedidos();
     this.habilitaBotones(this.pedidos[this.indexPedidoActual].productos);
   }
   
-
-  generarFactura() {
-
-  }
 
   getUser(nit: string) {
     this.clientService.getCliente( Number(nit))
@@ -250,18 +256,12 @@ export class PedidosLlevarComponent implements OnInit {
         });
   }
 
-  campoNoValido(dato: string){
-
-  }
-
   
   
   // Limpia el pedido actual y habilita o no los botones
   limpiarPedido() {
     this.productosPedidosTemp = [];
     let indexPedido = this.pedidos.indexOf(this.pedidoTemp);
-    console.log('ped-leng: ', this.pedidos.length, 'index: ', indexPedido, 'val: ', this.pedidoTemp);
-    
     this.pedidos.splice(indexPedido, 1);
     this.pedidoTemp = this.pedidoClean;
     this.guardarPedidos();
@@ -282,6 +282,106 @@ export class PedidosLlevarComponent implements OnInit {
   cerrarPedido() {
     this.mostrarPedido = false;
     this.mostrarPedidos = true;
+  }
+
+
+
+
+  generarFactura() {
+
+    this.formSubmitted = true;
+    this.factura = false;
+    if( this.facturaForm.invalid ) {
+      return;
+    }
+    
+    // Si el cliente ingresado no existe se Crea un nuevo registro de clientes
+    if(!this.clienteExiste) {
+      this.creaNuevoCliente();
+    }
+    else {
+      this.creaNuevoRegistroFactura();
+    }
+  }
+
+  
+  creaNuevoCliente() {
+    // CREACION DE NUEVO CLIENTE
+    this.clienteExiste = false;
+    this.clientService.crearCliente(this.facturaForm.value)
+    .subscribe( (resp: any) => {
+
+      this.clientTemp = resp.nuevoCliente; 
+      
+      // Asignamos ID y NOMBRE del nuevo cliente creado
+      this.creaNuevoRegistroFactura();
+      Swal.fire('CLIENTE CREADO: ', 'Cliente creado', 'success');
+      console.log('CLIENTE CREADOOOO');
+      
+      
+    }, (err) => {
+      Swal.fire('Error: ', err.error.msg, 'error');
+    }); 
+  }
+
+  creaNuevoRegistroFactura() {
+
+    // Se asignan los datos de la Factura SI EXISTE
+    this.llenaDatosFactura();
+
+    // GENERAR NUEVA FACTURA
+    this.facturaService.crearFactura(this.facturaData)
+    .subscribe( (res: any) => { // res devuelve un ojbeto {msj: '', nuevaFactura: []}
+
+    console.log(res);
+    
+      this.generarDetallesFacturas(res.nuevaFactura);
+
+      // Swal.fire('Correcto', 'Factura creada Correctamente', 'success');
+      console.log('FACTURA CREADAAAAA');
+    }, (err) => {
+      Swal.fire('error', 'Error al crear Factura', 'error');
+      console.log(err);
+    })
+  }
+
+  generarDetallesFacturas(nuevaFactura: FacturaForm) {
+    // GENERAR NUEVO DETALLE FACTURA
+    this.pedidos[this.indexPedidoActual].productos.forEach( pedido => {
+
+      this.detalleFacturaTemp.cantidad = pedido.cantidad;
+      this.detalleFacturaTemp.id_factura = nuevaFactura._id;
+      this.detalleFacturaTemp.id_producto = pedido._id;
+      this.detalleFacturaTemp.total = pedido.precio_venta * pedido.cantidad;
+      this.detalleFacturaTemp.precio_unitario = pedido.precio_venta;
+      this.detalleFacturaTemp.usuario = this.userService.uid;
+      
+      this.detalleFacturaService.crearDetalleFactura(this.detalleFacturaTemp)
+        .subscribe( resp => {
+            console.log('DETALLE FACTURA CREADOS: ', resp);
+        });
+    });
+
+    // this.limpiarPedido();
+    // this.habilitaBotones(this.pedidos[this.indexPedidoActual].productos);
+    this.cancelarPedido();
+}
+
+
+  llenaDatosFactura() {
+    this.facturaData.id_cliente = this.clientTemp._id;
+    this.facturaData.nombre_cliente = this.clientTemp.nombre;
+    this.facturaData.total_factura = this.pedidos[this.indexPedidoActual].total;
+    this.facturaData.fecha = new Date().toISOString();
+  }
+
+  campoNoValido( campo: string): boolean {
+    if( this.facturaForm.get(campo).invalid && this.formSubmitted ) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
 }
