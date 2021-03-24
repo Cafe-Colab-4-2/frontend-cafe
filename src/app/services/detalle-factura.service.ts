@@ -48,7 +48,7 @@ export class DetalleFacturaService {
 
   // Crear Factura
   crearDetalleFactura( formData: DetalleFactura ) {
-    console.log('Creando Detalle Factura Service');
+    // console.log('Creando Detalle Factura Service');
     return this.http.post<DetalleFactura>(`${ base_url }/detalles-facturas`, formData, this.userService.headers  );
   }
   // Fin Crear Factura
