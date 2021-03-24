@@ -144,8 +144,8 @@ export class UsersComponent {
     }
 
     this.busquedaSerivce.buscar( 'usuarios', termino)
-      .subscribe( resp => {
-        //this.usuarios = resp
+      .subscribe( (resp: Usuario[]) => {
+        this.usuarios = resp
       }
       );
     

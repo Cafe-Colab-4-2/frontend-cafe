@@ -26,15 +26,7 @@ export class ProductComponent {
 
   public formSubmitted = false;
 
-  public registerForm = this.fb.group({
-    categoria: ['', Validators.required],
-    presentacion: [ '', [Validators.required,] ],
-    stock: [ '', Validators.required ],
-    precio_venta: [ '', Validators.required ],
-    descripcion: [ '', Validators.required ],
-    userId: [this.userService.uid, Validators.required ],
-  
-  });
+  public registerForm: FormGroup;
 
   constructor( 
                 private fb: FormBuilder, 
@@ -42,9 +34,22 @@ export class ProductComponent {
                 private productService: ProductService,
                 private busquedaSerivce: BusquedasService ) { 
                   this.cargarproductos();
+                  this.cargaCleanRegisterForm();
                   this.cargando = true;
                 }
 //crear el producto
+
+  cargaCleanRegisterForm() {
+    this.registerForm = this.fb.group({
+      categoria: ['', Validators.required],
+      presentacion: [ '', [Validators.required,] ],
+      stock: [ '', Validators.required ],
+      precio_venta: [ '', Validators.required ],
+      descripcion: [ '', Validators.required ],
+      userId: [this.userService.uid, Validators.required ],
+    
+    });
+  }
 
   crearproducto() {
     this.formSubmitted = true;
@@ -73,7 +78,12 @@ export class ProductComponent {
       );
   }
 
-  //Validar la informacion
+  cargaModalNuevoProducto() {
+    this.editarProducto = false
+    this.cargaCleanRegisterForm();
+  }
+
+   //Validar la informacion
   campoNoValido( campo: string): boolean {
     if( this.registerForm.get(campo).invalid && this.formSubmitted ) {
       return true;
@@ -117,8 +127,8 @@ export class ProductComponent {
     }
 
     this.busquedaSerivce.buscar( 'productos', termino)
-      .subscribe( resp => {
-       // this.productos = resp
+      .subscribe( (resp: Producto[]) => {
+       this.productos = resp
       }
       );
     
@@ -139,7 +149,7 @@ export class ProductComponent {
     })
     
     swal.fire({
-      title: 'Delete user: ' + producto.descripcion + 'Are you sure?',
+      title: 'Delete product: ' + producto.descripcion + 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
@@ -156,7 +166,7 @@ export class ProductComponent {
             .subscribe( resp => {              
               swal.fire(
               'Deleted!',
-              'User has been deleted.',
+              'Product has been deleted.',
               'success'
               )
 
@@ -169,17 +179,18 @@ export class ProductComponent {
         ) {
           swal.fire(
             'Cancelled',
-            'User is safe :)',
+            'Product is safe :)',
             'error'
             )
           }
       }
     })
   }
-  cargarproducto(producto: Producto) {
-    this.editinProductId = producto._id;
-    
+
+
+  cargarProducto(producto: Producto) {
     this.editarProducto = true;
+    this.editinProductId = producto._id;
     this.registerForm = this.fb.group({
       categoria: [producto.categoria, Validators.required],
     presentacion: [producto.presentacion, [Validators.required,] ],
@@ -188,7 +199,22 @@ export class ProductComponent {
     descripcion: [producto.descripcion, Validators.required ],
     userId: [this.userService.uid, Validators.required ],
     } 
-    )}
+  )}
+
+
+
+  modificarProducto( producto: Producto ) {
+
+    console.log(this.registerForm.value, producto);
+
+    this.productService.guardarProducto(producto)
+      .subscribe(
+        (resp) => {
+          console.log(resp);
+          this.cargarproductos();
+        }
+      );
+}
 
 
 }

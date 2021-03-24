@@ -18,7 +18,7 @@ export class Producto {
 
     get getImage() {
 
-        if ( !this.img ) {
+        if ( !this.img || this.img === '/ruta/img_default.jpg') {
             return `${base_url}/uploads/productos/no-image`;
         }else if (this.img.includes('https')) {
             return this.img;
