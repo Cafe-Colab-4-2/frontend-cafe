@@ -17,6 +17,7 @@ import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
 import { ProfileComponent } from './profile/profile.component';
 import { TablesComponent } from './mantenimientos/tables/tables.component';
+import { PedidosLlevarComponent } from './mantenimientos/pedidos-llevar/pedidos-llevar.component';
 
 
 
@@ -33,6 +34,7 @@ import { TablesComponent } from './mantenimientos/tables/tables.component';
     UsersComponent,
     ProfileComponent,
     TablesComponent,
+    PedidosLlevarComponent,
 
   ],
   exports: [

@@ -1,4 +1,4 @@
-import { CdkDragDrop, CdkDragEnd, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+
 import { Component, OnInit } from '@angular/core';
 import { Mesa } from '../../../models/mesa.model';
 import { Producto } from '../../../models/productos.model';
@@ -18,8 +18,6 @@ import { DetalleFacturaService } from '../../../services/detalle-factura.service
   templateUrl: './tables.component.html'
 })
 export class TablesComponent implements OnInit {
-
-  $txtInputTermino : string;
 
   public factura = false;
   public formSubmitted = false;
@@ -43,6 +41,7 @@ export class TablesComponent implements OnInit {
   public facturaDataTemp: FacturaForm;
   public habilitaBoton = false;
   public totalCostosPedidosMesas: CostosTotalesMesas[] = [ ];  
+  public totalPedidosLlevar: number;
 
 
   public mesas: Mesa[] = [
@@ -82,6 +81,7 @@ export class TablesComponent implements OnInit {
     // this.verificaMesas();
     this.mesas = this.ponerMesaYDatos();
     this.formulario();
+    this.cargarPedidos();
   }
 
   formulario() {
@@ -128,7 +128,7 @@ export class TablesComponent implements OnInit {
     this.pedidos = [];
   }
 
-  cargaModal(noMesa: number) {
+  cargaModal(noMesa: number, pedido: boolean) {
     this.factura = false;
     this.modalProductos(true);
     this.numeroMesa = noMesa;
@@ -334,6 +334,10 @@ export class TablesComponent implements OnInit {
 
   guardarMesas() {
     localStorage.setItem('mesas',  JSON.stringify(this.mesas));
+  }
+  
+  cargarPedidos() {
+    this.totalPedidosLlevar =  JSON.parse(localStorage.getItem('pedidos')).length;
   }
 
 }
