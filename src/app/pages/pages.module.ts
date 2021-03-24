@@ -15,6 +15,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
+import { ProductComponent } from './mantenimientos/productos/productos.component';
 import { ProfileComponent } from './profile/profile.component';
 import { TablesComponent } from './mantenimientos/tables/tables.component';
 import { PedidosLlevarComponent } from './mantenimientos/pedidos-llevar/pedidos-llevar.component';
@@ -32,6 +33,7 @@ import { PedidosLlevarComponent } from './mantenimientos/pedidos-llevar/pedidos-
     PromisesComponent,
     RxjsComponent,
     UsersComponent,
+    ProductComponent,
     ProfileComponent,
     TablesComponent,
     PedidosLlevarComponent,

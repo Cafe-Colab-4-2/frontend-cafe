@@ -1,0 +1,289 @@
+<div class="row animated fadeIn fast"> 
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input  type="text"
+                        class= "form-control"
+                        placeholder="Search ..." 
+                        (keyup)="buscar(txtInputTermino.value)"
+                        #txtInputTermino/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row animated fadeIn fast" *ngIf="cargando">
+    <div class="col-12">
+
+        <div class="alert alert-info text-center">
+          <h4 class="alert-heading">Chargin</h4>
+          <i class="fa fa-spin fa-refresh fa-2x"></i>
+          <p class="mb-0">Please, waith!</p>
+        </div>
+    </div>
+</div>
+
+
+<!-- DESPLIEGUE DE INFORMACIÓN DE PRODUCTOS -->
+<div class="row fadeIn" *ngIf="!cargando"> 
+    <div class="col-12">
+        <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Productos ({{ totalproductos }}) </h4>
+            <h6 class="card-subtitle">Registro de Productos</h6>
+            <!-- <button class="btn btn-success" (click)="nuevoUsuario = true" >Add User</button> -->
+
+            <!-- Button trigger modal Dispara la ventana emergente para modificar usuarios -->
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalFormularioProducto" (click)="cargaModalNuevoProducto()">
+                <i class="mdi mdi-account-plus"></i>
+                New Product
+            </button>
+            <br><br>
+    
+            <!-- Modal -->
+            <div class="modal fade" id="modalFormularioProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                        
+                            <!-- ============================================================== -->
+                            <!-- Main wrapper - style you can find in pages.scss -->
+                            <!-- ============================================================== -->
+                            <section id="wrapper" 
+                                    class="login-register login-sidebar fadeIn" 
+                                    style="background-image:url(../assets/images/background/login-register.jpg);"
+                                    *ngIf="nuevoproducto">
+                                <div class="login-box card">
+                                    <div class="card-body">
+
+                                        <!-- ============================================================== -->
+                                        <!-- FORMULARIO - NUEVO PRODUCTO  -->
+                                        <!-- ============================================================== -->
+                                        <form  *ngIf="!editarProducto" 
+                                                class="form-horizontal form-material" 
+                                                id="loginform" 
+                                                autocomplete="off"
+                                                [formGroup]="registerForm"
+                                                (ngSubmit)="crearproducto()">
+                                                <a href="javascript:void(0)" class="text-center db"><img src="./assets/images/logo-dark-text.png" alt="Home"  width="20%"/></a>
+                                                <h2 class="text-center"> <b> New Product </b></h2>
+                                                <br><br>
+                                            <div class="form-group m-t-20">
+                                                <div class="col-xs-12">
+                                                    <input class="form-control"
+                                                        type="text" 
+                                                        required="" 
+                                                        placeholder="Product Name"
+                                                        formControlName="descripcion">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group ">
+                                                <div class="col-xs-12">
+                                                    <input class="form-control border-primary" type="text" required="" placeholder="Categoria" formControlName="categoria">
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <div class="col-xs-12">
+                                                    <input class="form-control" type="text" required="" placeholder="presentacion" formControlName="presentacion">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <input class="form-control" type="text" required="" placeholder="Stock"  formControlName="stock">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <input class="form-control" type="text" required="" placeholder="Precio"  formControlName="precio_venta">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col text-danger">
+                                                    <p *ngIf="campoNoValido('descripcion')">* Descripcion is required </p>
+                                                    <p *ngIf="campoNoValido('categoria')">* Categoria is required </p>
+                                                    <p *ngIf="campoNoValido('presentacion')">* Presentacion is required </p>
+                                                    <p *ngIf="campoNoValido('stock')">* Stock is required </p>
+                                                    <p *ngIf="campoNoValido('precio_venta')">* Precio is required </p>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="form-group text-center m-t-20">
+                                                <div class="col-xs-12">
+                                                    <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">
+                                                        <i class="mdi mdi-account-plus"></i>
+                                                        Add Product
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                        <!-- ============================================================== -->
+                                        <!-- FORMULARIO / EDICION DE PRODUCTO -->
+                                        <!-- ============================================================== -->
+                                        <form  
+                                            *ngIf="editarProducto" 
+                                            class="form-horizontal form-material" 
+                                            id="loginform" 
+                                            autocomplete="off"
+                                            [formGroup]="registerForm"
+                                            (ngSubmit)="modificarProducto()">
+                                            <a href="javascript:void(0)" class="text-center db"><img src="./assets/images/logo-dark-text.png" alt="Home"  width="20%"/></a>
+                                            <h2 class="text-center"> <b> Edit Product </b></h2>
+                                            <br><br>
+                                            <div class="form-group m-t-20">
+                                                <div class="col-xs-12">
+                                                    <small>
+                                                        <b>
+                                                            Description
+                                                        </b>
+                                                    </small>
+                                                    <input class="form-control"
+                                                        type="text" 
+                                                        required="" 
+                                                        placeholder="Product Name"
+                                                        formControlName="descripcion">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group ">
+                                                <div class="col-xs-12">
+                                                    <small>
+                                                        <b>
+                                                            Category
+                                                        </b>
+                                                    </small>
+                                                    <input class="form-control border-primary" type="text" required="" placeholder="Categoria" formControlName="categoria">
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <div class="col-xs-12">
+                                                    <small>
+                                                        <b>
+                                                        Presentation
+                                                        </b>
+                                                    </small>
+                                                    <input class="form-control" type="text" required="" placeholder="presentacion" formControlName="presentacion">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <small>
+                                                        <b>
+                                                    Stock
+                                                        </b>
+                                                    </small>
+                                                    <input class="form-control" type="text" required="" placeholder="Stock"  formControlName="stock">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <small>
+                                                        <b>
+                                                    Price
+                                                        </b>
+                                                    </small>
+                                                    <input class="form-control" type="text" required="" placeholder="Precio"  formControlName="precio_venta">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col text-danger">
+                                                    <p *ngIf="campoNoValido('descripcion')">* Descripcion is required </p>
+                                                    <p *ngIf="campoNoValido('categoria')">* Categoria is required </p>
+                                                    <p *ngIf="campoNoValido('presentacion')">* Presentacion is required </p>
+                                                    <p *ngIf="campoNoValido('stock')">* Stock is required </p>
+                                                    <p *ngIf="campoNoValido('precio_venta')">* Precio is required </p>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="form-group text-center m-t-20">
+                                                <div class="col-xs-12">
+                                                    <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">
+                                                        <i class="mdi mdi-account-plus"></i>
+                                                        Edit Product
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </section>
+                            <!-- ============================================================== -->
+                            <!-- End Wrapper -->
+                            <!-- ============================================================== -->
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="editarProducto = false">
+                            <i class="mdi mdi-close"></i>  
+                            Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="w100">Imagen</th>
+                            <th>Descripcion</th>
+                            <th>Presentacion</th>
+                            <th>Categoria</th>
+                            <th>Stock</th>
+                            <th>Precio Venta</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>            
+                        <tr  *ngFor="let product of productos">
+                            <td class="text-center"> <img [src]="product.getImage" alt="Imagen producto" class="avatar"> </td>
+                            <td> {{ product.descripcion }} </td>
+                            <td> {{ product.presentacion }} </td>
+                            <td>
+                                <select 
+                                class="form-control w140"
+                                [(ngModel)]="product.categoria"
+                                (change)="modificarProducto( product )"
+                                >
+                                    <option value="Small">Pequeño</option>
+                                    <option value="Medium">Mediano</option>
+                                    <option value="Big">Grande</option>
+                                </select>
+                            </td>
+
+                            <td> {{ product.stock }} </td>
+                            <td> {{ product.precio_venta }} </td>
+                            
+                            <td class="text-nowrap text-center">
+                                <a data-toggle="modal"  data-original-title="Edit"   (click)="cargarProducto(product)" data-target="#modalFormularioProducto"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                                <a data-toggle="tooltip" data-original-title="Close" (click)="eliminarproducto(product)" class="cursor"> <i class="fa fa-close text-danger"></i> </a>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="txtInputTermino.value.length === 0">
+                <button (click)="cambiarPagina(-5)" class="btn btn-secondary">Previous</button>
+                &nbsp;
+                {{ desde + 1 }} - 
+
+                <label *ngIf="((desde + 5) > totalproductos)">
+                    {{ totalproductos }}
+                </label>
+                <label *ngIf="!((desde + 5) > totalproductos)">
+                    {{ desde + 5 }}
+                </label>
+                &nbsp;
+                <button  (click)="cambiarPagina(5)" class="btn btn-secondary">Next</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

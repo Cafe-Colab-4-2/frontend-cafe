@@ -18,7 +18,8 @@ export class SidebarService {
       icon: 'mdi mdi-gauge',
       submenu: [
         { titulo: 'Tables', url: 'tables'},
-        { titulo: 'Users', url: 'users' }
+        { titulo: 'Users', url: 'users' },
+        { titulo: 'Productos', url: 'products' }
       ]
     }
   ]

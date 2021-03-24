@@ -9,6 +9,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { UsersComponent } from './mantenimientos/users/users.component';
+import { ProductComponent } from './mantenimientos/productos/productos.component';
 import { ProfileComponent } from './profile/profile.component';
 import { TablesComponent } from './mantenimientos/tables/tables.component';
 
@@ -27,6 +28,7 @@ const routes: Routes = [
           { path: 'users',            component: UsersComponent,            data: { titulo: 'Users of App'} },
           { path: 'profile',          component: ProfileComponent,          data: { titulo: 'My Profile'} },  
           { path: 'tables',           component: TablesComponent,           data: { titulo: 'Tables'} },  
+          { path: 'products',         component: ProductComponent,          data: { titulo: 'Productos'} },
         ]
       },
 
