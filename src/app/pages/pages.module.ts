@@ -19,6 +19,7 @@ import { ProductComponent } from './mantenimientos/productos/productos.component
 import { ProfileComponent } from './profile/profile.component';
 import { TablesComponent } from './mantenimientos/tables/tables.component';
 import { PedidosLlevarComponent } from './mantenimientos/pedidos-llevar/pedidos-llevar.component';
+import { ClientsComponent } from './mantenimientos/clients/clients.component';
 
 
 
@@ -37,6 +38,7 @@ import { PedidosLlevarComponent } from './mantenimientos/pedidos-llevar/pedidos-
     ProfileComponent,
     TablesComponent,
     PedidosLlevarComponent,
+    ClientsComponent,
 
   ],
   exports: [

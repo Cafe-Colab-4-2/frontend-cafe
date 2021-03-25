@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 import { Usuario } from '../models/usuario.model';
 import { Producto } from '../models/producto.model';
+import { Cliente } from '../models/cliente.model';
 
 const base_url = environment.base_url;
 
@@ -19,7 +20,6 @@ export class BusquedasService {
     return localStorage.getItem('token') || '';
   }
 
-  
   get headers() {
     return {
       headers: {
@@ -38,9 +38,13 @@ export class BusquedasService {
     return resultados.map(
       producto => new Producto(producto.categoria, producto.presentacion, producto.descripcion, producto.activo, producto.usuario, producto.stock, producto.precio_venta, producto.img, producto._id) 
     );
-
   }
 
+  private transformarClientes( resultados: any[]): Cliente[] {
+    return resultados.map(
+      cliente => new Cliente( cliente.nit, cliente.nombre, cliente.apellido, cliente.email, cliente.telefono, cliente.direccion, cliente.img, cliente.activo, cliente.usuario, cliente._id ) 
+    );
+  }
 
 
   buscar( 
@@ -59,6 +63,10 @@ export class BusquedasService {
 
                 case 'productos':
                   return this.transformarProductos( resp.resultados )
+                  break;
+
+                case 'clientes':
+                  return this.transformarClientes( resp.resultados )
                   break;
               
                 default:

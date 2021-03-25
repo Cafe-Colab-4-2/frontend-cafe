@@ -17,9 +17,10 @@ export class SidebarService {
       titulo: 'Mantenimientos',
       icon: 'mdi mdi-gauge',
       submenu: [
-        { titulo: 'Tables & Deliveries', url: 'tables'},
+        { titulo: 'Tables & Deliveries', url: 'tables-deliveries'},
         { titulo: 'Users', url: 'users' },
-        { titulo: 'Producto', url: 'products' }
+        { titulo: 'Clients', url: 'clients'},
+        { titulo: 'Products', url: 'products' }, 
       ]
     }
   ]

@@ -12,6 +12,7 @@ import { UsersComponent } from './mantenimientos/users/users.component';
 import { ProductComponent } from './mantenimientos/productos/productos.component';
 import { ProfileComponent } from './profile/profile.component';
 import { TablesComponent } from './mantenimientos/tables/tables.component';
+import { ClientsComponent } from './mantenimientos/clients/clients.component';
 
 
 const routes: Routes = [
@@ -20,15 +21,16 @@ const routes: Routes = [
         component: PagesComponent,
         canActivate: [ AuthGuard ],
         children: [
-          { path: '',                 component: DashboardComponent,        data: { titulo: 'Dashboard'} },
-          { path: 'progress',         component: ProgressComponent,         data: { titulo: 'Progress'} },
-          { path: 'account-settings', component: AccountSettingsComponent,  data: { titulo: 'Account Settings'} },
-          { path: 'promises',         component: PromisesComponent,         data: { titulo: 'Promises'} },
-          { path: 'rxjs',             component: RxjsComponent,             data: { titulo: 'Rxjs'} },
-          { path: 'users',            component: UsersComponent,            data: { titulo: 'Users of App'} },
-          { path: 'profile',          component: ProfileComponent,          data: { titulo: 'My Profile'} },  
-          { path: 'tables',           component: TablesComponent,           data: { titulo: 'Tables'} },  
-          { path: 'products',         component: ProductComponent,          data: { titulo: 'Productos'} },
+          { path: '',                  component: DashboardComponent,        data: { titulo: 'Dashboard'} },
+          { path: 'progress',          component: ProgressComponent,         data: { titulo: 'Progress'} },
+          { path: 'account-settings',  component: AccountSettingsComponent,  data: { titulo: 'Account Settings'} },
+          { path: 'promises',          component: PromisesComponent,         data: { titulo: 'Promises'} },
+          { path: 'rxjs',              component: RxjsComponent,             data: { titulo: 'Rxjs'} },
+          { path: 'users',             component: UsersComponent,            data: { titulo: 'Users of App'} },
+          { path: 'profile',           component: ProfileComponent,          data: { titulo: 'My Profile'} },  
+          { path: 'tables-deliveries', component: TablesComponent,           data: { titulo: 'Tables & Deliveries'} },  
+          { path: 'products',          component: ProductComponent,          data: { titulo: 'Products'} },
+          { path: 'clients',           component: ClientsComponent,          data: { titulo: 'Clients'}}
         ]
       },
 
