@@ -2,18 +2,14 @@ import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { from, Observable, of } from 'rxjs';
-import { tap, map, catchError } from 'rxjs/operators';
+import { map} from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
-import { LoginForm } from '../interfaces/login-form';
-import { RegisterForm } from '../interfaces/register-form';
-import { CargarUsuarios } from '../interfaces/cargar-usuarios';
 import { UsersService} from  './users.service';
-import { CargarProductos } from '../interfaces/cargar-productos';
-import { ProductoForm } from '../interfaces/producto-form';
-import { Factura, DetalleFactura } from '../interfaces/factura.forms';
+
+import { CargarDetallesFacturas } from '../interfaces/cargar-detalles-facturas';
+import { DetalleFactura } from '../models/detalle-factura.model';
 
 
 
@@ -32,8 +28,7 @@ export class DetalleFacturaService {
 
   constructor( private http: HttpClient, 
                 private userService: UsersService,
-                private router: Router,
-                private ngZone: NgZone ) {
+              ) {
 
     // this.googleInit();
     
@@ -64,6 +59,24 @@ export class DetalleFacturaService {
 
     
     return this.http.put(`${ base_url }/detalles-facturas/${productId}`, data, this.userService.headers );
+  }
+
+    // CARGAR USUARIOS CON PAGINACIÓN
+cargarDetallesFacturas( desde: number = 0 ) {
+
+  const url = `${ base_url }/detalles-facturas?desde=${ desde }`;
+    return this.http.get<CargarDetallesFacturas>( url, this.userService.headers )
+            .pipe(
+              map( resp => {    
+                const detallesFacturas = resp.detallesFacturas.map( 
+                  detalleFactura => new DetalleFactura( detalleFactura.id_producto, detalleFactura.id_producto, detalleFactura.cantidad, detalleFactura.precio_unitario, detalleFactura.total, detalleFactura.usuario, detalleFactura._id)  
+                );
+                return {
+                  total: resp.total,
+                  detallesFacturas
+                };
+              })
+            )
   }
   
 

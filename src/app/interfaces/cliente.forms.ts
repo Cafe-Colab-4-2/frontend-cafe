@@ -7,6 +7,5 @@ export interface ClienteForm {
     img ?: string,
     activo  ?: string,
     usuario ?: string,
-    apellido?: string,
-    _id?: string,
+    apellido?: string
 }

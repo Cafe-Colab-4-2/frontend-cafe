@@ -1,13 +1,3 @@
-export interface Factura {
-    fecha : string,
-    total_factura : number,
-    nombre_cliente : string,
-    nit_cliente : string,
-    usuario: string,
-    _id?: string,
-    id_cliente ?: string
-}
-
 export interface DetalleFactura {
     id_factura : string,
     id_producto : string,
@@ -19,12 +9,9 @@ export interface DetalleFactura {
 }
 
 export interface FacturaForm {
-    nombre_cliente: string,
+    fecha : string,
+    total_factura: number,
     id_cliente: string,
-    total_factura?: number,
-    fecha ?: string,
-    _id ?: string
+    usuario: string,
 }
-
-
     

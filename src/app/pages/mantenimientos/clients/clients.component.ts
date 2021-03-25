@@ -36,7 +36,8 @@ export class ClientsComponent{
                   this.formulario();
                   this.cargarClientes();
                   this.cargando = true;
-                }
+  }
+
 
   logOut() {
     localStorage.removeItem('token');
