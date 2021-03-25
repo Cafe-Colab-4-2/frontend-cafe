@@ -5,15 +5,15 @@ const base_url = environment.base_url;
 export class Cliente {
 
     constructor(
-        public nombre : string,
         public nit: string,
+        public nombre : string,
+        public apellido?: string,
         public email  ?: string,
         public telefono  ?: string,
         public direccion  ?: string,
         public img ?: string,
         public activo  ?: string,
         public usuario ?: string,
-        public apellido?: string,
         public _id?: string,
     ) {}
 
