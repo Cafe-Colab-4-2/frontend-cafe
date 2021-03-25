@@ -19,7 +19,8 @@ export class SidebarService {
       submenu: [
         { titulo: 'Tables & Deliveries', url: 'tables-deliveries'},
         { titulo: 'Users', url: 'users' },
-        { titulo: 'Products', url: 'products' }
+        { titulo: 'Clients', url: 'clients'},
+        { titulo: 'Products', url: 'products' }, 
       ]
     }
   ]

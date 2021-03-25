@@ -24,7 +24,7 @@ export class Cliente {
         }else if (this.img.includes('https')) {
             return this.img;
         }else if ( this.img) {
-            return `${base_url}/uploads/clientes/${this.img}`;
+            return `${base_url}/uploads/clientes${this.img}`;
         }else{
             return `${base_url}/uploads/clientes/no-image`;
         }

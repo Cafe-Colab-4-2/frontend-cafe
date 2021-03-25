@@ -17,6 +17,7 @@ import { Producto } from '../models/productos.model';
 import { Cliente } from '../models/cliente.model';
 import { ClienteForm } from '../interfaces/cliente.forms';
 import { Factura } from '../interfaces/factura.forms';
+import { CargarClientes } from '../interfaces/cargar-clientes';
 
 
 
@@ -75,7 +76,29 @@ export class ClienteService {
     return this.http.get(url, this.userService.headers);
   }
 
-  
+  cargarClientes( desde: number = 0 ){
+    const url = `${ base_url }/clientes?desde=${ desde }`;
+    return this.http.get<CargarClientes>( url, this.userService.headers )
+            .pipe(
+              map( resp => {
+                const clientes = resp.clientes.map( 
+                  cliente => new Cliente( cliente.nit, cliente.nombre, cliente.apellido, cliente.email, cliente.telefono, cliente.direccion, cliente.img, cliente.activo, cliente.usuario, cliente._id ) 
+                );
+                return {
+                  total: resp.total,
+                  clientes
+                };
+              })
+            )
+  }
 
+  eliminarCliente( cliente: Cliente ) {
+    const url = `${ base_url }/clientes/${ cliente._id }`;
+    return this.http.delete( url, this.userService.headers );
+  }
+
+  guardarCliente( cliente: Cliente, clientId: string ) {
+    return this.http.put(`${ base_url }/clientes/${ clientId }`, cliente, this.userService.headers );
+  }
 
 }

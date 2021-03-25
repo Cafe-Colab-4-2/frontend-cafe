@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Cliente } from '../../../models/cliente.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UsersService } from '../../../services/users.service';
@@ -10,12 +10,13 @@ import Swal from 'sweetalert2';
   selector: 'app-clients',
   templateUrl: './clients.component.html'
 })
-export class ClientsComponent implements OnInit {
+export class ClientsComponent{
 
   public nuevoCliente = true;
   public editarCliente = false;
   public clientes: Cliente[] = [];
   public clientesTemp: Cliente[] = [];
+  public editinClient: Cliente;
   public totalClientes: number;
   public desde: number = 0;
   public cargando = true;
@@ -51,7 +52,8 @@ export class ClientsComponent implements OnInit {
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
       activo: [true, Validators.required],
-      terminos: [ true, Validators.required ]
+      terminos: [ true, Validators.required ],
+      userId: [this.userService.uid, Validators.required ],
     });
   }
 
@@ -72,8 +74,7 @@ export class ClientsComponent implements OnInit {
         console.log(resp);
         Swal.fire('Creado:', 'Usuario Creado Correctamente', 'success');
 
-        // Se oculta el formulario si el usuario fue creado correctamente
-        // this.nuevoUsuario = false;
+        this.cargarClientes();
 
       }, (err) => {
         Swal.fire('Error: ', err.error.msg, 'error');
@@ -97,30 +98,14 @@ export class ClientsComponent implements OnInit {
     return !this.clientRegisterForm.get('terminos').value && this.formSubmitted;
   }
 
-  passwordsIguales(pass1: string, pass2: string) {
-
-    return ( formGroup: FormGroup ) => {
-
-      const pass1Control = formGroup.get(pass1);
-      const pass2Control = formGroup.get(pass2);
-
-      if ( pass1Control.value === pass2Control.value ) {
-        pass2Control.setErrors(null);
-      }
-      else {
-        pass2Control.setErrors( {noEsIgual: true} );
-      }
-    }
-  }
 
 
   cargarClientes( ){
     this.clientService.cargarClientes( this.desde )
-    // this.userService.cargarUsuarios( this.desde  )
       .subscribe( (resp: any) => {
         console.log(resp);
-        this.clientes = resp.usuarios;
-        this.clientesTemp = resp.usuarios;
+        this.clientes = resp.clientes;
+        this.clientesTemp = resp.clientes;
         this.totalClientes = resp.total;
         
       this.cargando = false;
@@ -151,7 +136,6 @@ export class ClientsComponent implements OnInit {
       );
   }
 
-
   eliminarCliente( cliente: Cliente ) {
   this.editarCliente = false;
   if ( cliente._id === this.userService.uid ){
@@ -181,7 +165,7 @@ export class ClientsComponent implements OnInit {
         
         if (result.isConfirmed) {
           
-          this.userService.eliminarCliente( cliente )
+          this.clientService.eliminarCliente( cliente )
             .subscribe( resp => {              
               swal.fire(
               'Deleted!',
@@ -207,23 +191,27 @@ export class ClientsComponent implements OnInit {
     })
   }
 
-  modificarCliente( client: Cliente ) {
-
-      console.log(this.clientRegisterForm.value, client);
-      
-    this.userService.guardarCliente( client )
-      .subscribe(
-        resp => {
-          console.log(resp);
-          this.cargarClientes()
-        }
-      );
+  modificarCliente(cliente: Cliente ) {
+    if(cliente === undefined){
+      this.clientService.guardarCliente( this.clientRegisterForm.value, this.editingClienteId )
+        .subscribe(
+          resp => {
+            console.log(resp);
+            this.cargarClientes()
+          }
+        );
+    } else {
+      this.clientService.guardarCliente( cliente, cliente._id )
+        .subscribe(
+          resp => {
+            console.log(resp);
+            this.cargarClientes()
+          }
+        );
+    }
   }
-
-
-
+  
   cargarCliente(cliente: Cliente) {
-    this.editingClienteId = cliente._id;
     
     this.editarCliente = true;
     this.clientRegisterForm = this.fb.group({
@@ -234,8 +222,12 @@ export class ClientsComponent implements OnInit {
       telefono: [cliente.telefono, Validators.required],
       direccion: [cliente.direccion, Validators.required],
       activo: [true, Validators.required],
-      terminos: [ true, Validators.required ]
+      terminos: [ true, Validators.required ],
+      userId: [this.userService.uid, Validators.required ],
     });
+    
+    this.editingClienteId = cliente._id;
+    this.editinClient = this.clientRegisterForm.value;
   }
 
 }
