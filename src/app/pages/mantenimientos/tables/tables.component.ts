@@ -8,7 +8,8 @@ import { ProductService } from '../../../services/product.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ClienteService } from '../../../services/client.service';
 import { Cliente } from '../../../models/cliente.model';
-import { Factura, DetalleFactura, FacturaForm } from '../../../interfaces/factura.forms';
+import { DetalleFactura, FacturaForm } from '../../../interfaces/factura.forms';
+import { Factura } from '../../../models/factura.model';
 import { UsersService } from '../../../services/users.service';
 import { FacturaService } from '../../../services/factura.service';
 import { DetalleFacturaService } from '../../../services/detalle-factura.service';
@@ -34,10 +35,10 @@ export class TablesComponent implements OnInit {
   public cliente: Cliente;
   public clientTemp: Cliente;
   public clienteExiste = false;
-  public facturaTemp: Factura = {fecha: '', total_factura: 0, nombre_cliente: '', nit_cliente: '', usuario: '', _id: ''};
+  public facturaTemp: FacturaForm = {fecha: '', total_factura: 0, usuario: '', id_cliente: ''};
   public fechaYHora = new Date();
   public detalleFacturaTemp: DetalleFactura = {id_factura: '', id_producto : '', cantidad : 0, precio_unitario : 0, total: 0, usuario: '' }
-  public facturaData: FacturaForm = { nombre_cliente: '', id_cliente: ''};
+  // public facturaData: FacturaForm = { nombre_cliente: '', id_cliente: ''};
   public facturaDataTemp: FacturaForm;
   public habilitaBoton = false;
   public totalCostosPedidosMesas: CostosTotalesMesas[] = [ ];  
@@ -220,7 +221,9 @@ export class TablesComponent implements OnInit {
         this.clienteExiste = false;
         
         // Asignamos ID y NOMBRE del nuevo cliente creado
-        this.creaNuevoRegistroFactura();
+        this.creaNuevoRegistroFactura(resp.nuevoCliente);
+        
+        
         
       }, (err) => {
         Swal.fire('Error: ', err.error.msg, 'error');
@@ -240,7 +243,7 @@ export class TablesComponent implements OnInit {
       this.creaNuevoCliente();
     }
     else {
-      this.creaNuevoRegistroFactura();
+      this.creaNuevoRegistroFactura(this.clientTemp);
     }
   }
 
@@ -265,17 +268,18 @@ export class TablesComponent implements OnInit {
       this.habilitaBotones(this.pedidos);
   }
 
-  creaNuevoRegistroFactura() {
+  creaNuevoRegistroFactura(cliente: Cliente) {
 
     // Se asignan los datos de la Factura SI EXISTE
-    this.llenaDatosFactura();
+    this.llenaDatosFactura(cliente);
 
     // GENERAR NUEVA FACTURA
-    this.facturaService.crearFactura(this.facturaData)
+    this.facturaService.crearFactura(this.facturaTemp)
     .subscribe( (res: any) => { // res devuelve un ojbeto {msj: '', nuevaFactura: []}
 
       this.generarDetallesFacturas(res.nuevaFactura._id);
-
+      console.log(res);
+      
       Swal.fire('Creado', 'Factura creada Correctamente', 'success');
     }, (err) => {
       Swal.fire('error', 'Error al crear Factura', 'error');
@@ -304,11 +308,12 @@ export class TablesComponent implements OnInit {
         });
   }
 
-  llenaDatosFactura() {
-    this.facturaData.id_cliente = this.clientTemp._id;
-    this.facturaData.nombre_cliente = this.clientTemp.nombre;
-    this.facturaData.total_factura = this.mesas[this.numeroMesa -1 ].total;
-    this.facturaData.fecha = new Date().toISOString();
+  llenaDatosFactura(cliente: Cliente) {
+    this.facturaTemp.fecha = new Date().toUTCString();
+    
+    this.facturaTemp.id_cliente = cliente._id;
+    this.facturaTemp.total_factura = this.mesas[this.numeroMesa -1 ].total;
+    this.facturaTemp.usuario = this.userService.uid;
   }
 
   limpiarPedido() {
